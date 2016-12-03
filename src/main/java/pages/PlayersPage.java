@@ -14,6 +14,7 @@ public class PlayersPage extends BasePage{
         super(driver);
     }
 
+    //initialize a new instance and open page
     public static PlayersPage openPlayersPage(WebDriver driver){
         PlayersPage page = new PlayersPage(driver);
         page.open();

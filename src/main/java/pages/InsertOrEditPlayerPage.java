@@ -15,6 +15,7 @@ public class InsertOrEditPlayerPage extends BasePage{
         super(driver);
     }
 
+    //initialize a new instance and open page
     public static InsertOrEditPlayerPage openInsertPlayerPage(WebDriver driver){
         InsertOrEditPlayerPage page = new InsertOrEditPlayerPage(driver);
         page.openInsertPlayerPage();

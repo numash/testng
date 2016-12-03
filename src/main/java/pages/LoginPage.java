@@ -17,6 +17,7 @@ public class LoginPage extends BasePage{
         return "auth/login";
     }
 
+    //initialize a new instance and open page
     public static LoginPage loginPage(WebDriver driver){
         LoginPage page = new LoginPage(driver);
         page.open();

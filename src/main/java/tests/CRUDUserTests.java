@@ -35,6 +35,7 @@ public class CRUDUserTests {
         LoginPage loginPage = LoginPage.loginPage(driver);
         loginPage.login("admin", "123");
 
+        //TODO wait until clickable
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
@@ -258,21 +259,20 @@ public class CRUDUserTests {
 
     //fills poker player fields with random data
     private PokerPlayer createRandomPokerPlayer() {
-        //TODO unique random string for each field
         RandomManager randomManager = new RandomManager();
-        String randomString = randomManager.getRandomString(5);
 
         return new PokerPlayer(
-                "user68_" + randomString,
-                "user68_" + randomString + "@gmail.com",
-                "first",
-                "last",
+                "user68_" + randomManager.getRandomString(5),
+                "user68_" + randomManager.getRandomString(5) + "@gmail.com",
+                "first" + randomManager.getRandomString(5),
+                "last" + randomManager.getRandomString(5),
                 "City.",
                 "UKRAINE",
-                "Address68, " + randomString,
+                "Address68, " + randomManager.getRandomString(5),
                 "+312345678, 890",
                 "Male",
-                "10-10-1990");
+                //"10-10-1990");
+                randomManager.getRandomDate());
     }
 
     private void updatePlayerData(PokerPlayer player){
