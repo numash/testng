@@ -7,21 +7,28 @@ import org.openqa.selenium.WebElement;
 /**
  * Created by numash on 30.11.2016.
  */
-public class LoginPage {
-
-    private WebDriver driver;
-    public static final String URL = "http://80.92.229.236:81/auth/login";
+public class LoginPage extends BasePage{
 
     public LoginPage(WebDriver driver){
-        this.driver = driver;
+        super(driver);
+    }
+
+    protected String getRelativeUrl() {
+        return "auth/login";
     }
 
     public void open(){
-        driver.get(URL);
+        driver.get(getFullUrl());
+    }
+
+    public String getUrl() {
+        return getFullUrl();
     }
 
     public void login(String username, String password){
-
+        setUsername(username);
+        setPassword(password);
+        clickOnLogin();
     }
 
     public void setUsername(String username){
@@ -41,8 +48,18 @@ public class LoginPage {
         loginBtn.click();
     }
 
-    public String getErrorMessage(){
+    /*public String getErrorMessage(){
         WebElement errorField = driver.findElement(By.xpath("//ul[@class='errors']/li"));
+        return errorField.getText();
+    }*/
+
+    public String getUsernameErrorMessage(){
+        WebElement errorField = driver.findElement(By.xpath("//*[@id='username-element']/ul[@class='errors']/li"));
+        return errorField.getText();
+    }
+
+    public String getPasswordErrorMessage(){
+        WebElement errorField = driver.findElement(By.xpath("//*[@id='password-element']/ul[@class='errors']/li"));
         return errorField.getText();
     }
 }
