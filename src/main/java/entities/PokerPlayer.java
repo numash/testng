@@ -18,18 +18,6 @@ public class PokerPlayer {
     private String gender;
     private String birthday;
 
-    public PokerPlayer(){
-        this.username = null;
-        this.email = null;
-        this.firstname = null;
-        this.lastname = null;
-        this.city = null;
-        this.country = null;
-        this.address = null;
-        this.phone = null;
-        this.gender = null;
-        this.birthday = null;
-    }
     //constructor
     public PokerPlayer(
             String username,

@@ -17,7 +17,14 @@ public class LoginPage extends BasePage{
         return "auth/login";
     }
 
-    public void open(){
+    public static LoginPage loginPage(WebDriver driver){
+        LoginPage page = new LoginPage(driver);
+        page.open();
+
+        return page;
+    }
+
+    private void open(){
         driver.get(getFullUrl());
     }
 
