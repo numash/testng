@@ -21,10 +21,6 @@ public class LoginPage extends BasePage{
         driver.get(getFullUrl());
     }
 
-    public String getUrl() {
-        return getFullUrl();
-    }
-
     public void login(String username, String password){
         setUsername(username);
         setPassword(password);

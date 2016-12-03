@@ -1,7 +1,5 @@
 package entities;
 
-import helpers.RandomManager;
-
 /**
  * Created by numash on 02.12.2016.
  */
@@ -20,6 +18,18 @@ public class PokerPlayer {
     private String gender;
     private String birthday;
 
+    public PokerPlayer(){
+        this.username = null;
+        this.email = null;
+        this.firstname = null;
+        this.lastname = null;
+        this.city = null;
+        this.country = null;
+        this.address = null;
+        this.phone = null;
+        this.gender = null;
+        this.birthday = null;
+    }
     //constructor
     public PokerPlayer(
             String username,
@@ -43,25 +53,6 @@ public class PokerPlayer {
         this.phone = phone;
         this.gender = gender;
         this.birthday = birthday;
-    }
-
-    //fills poker player fields with random data
-    public static PokerPlayer CreateRandomPokerPlayer() {
-
-        RandomManager randomManager = new RandomManager();
-        String randomString = randomManager.getRandomString(5);
-
-        return new PokerPlayer(
-                "user68_" + randomString,
-                "user68_" + randomString + "@gmail.com",
-                "first",
-                "last",
-                "City.",
-                "UKRAINE",
-                "Address68, " + randomString,
-                "+312345678, 890",
-                "Male",
-                "10-10-1990");
     }
 
     public void setUsername(String username) {

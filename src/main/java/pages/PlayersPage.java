@@ -14,16 +14,23 @@ public class PlayersPage extends BasePage{
         super(driver);
     }
 
+    public static PlayersPage openPlayersPage(WebDriver driver){
+        PlayersPage page = new PlayersPage(driver);
+        page.open();
+
+        return page;
+    }
+
     protected String getRelativeUrl() {
         return "players";
     }
 
-    public void open(){
+    private void open(){
         driver.get(getFullUrl());
     }
 
-    public String getUrl() {
-        return getFullUrl();
+    public void refresh(){
+        driver.get(getFullUrl());
     }
 
     public void clickOnInsertLink(){
@@ -31,21 +38,18 @@ public class PlayersPage extends BasePage{
         insertLink.click();
     }
 
-    public void openEditPlayerPage(String username){
+    public InsertOrEditPlayerPage openEditPlayerPage(String username) {
+        searchPlayerByUsername(username);
         WebElement playerEditLink = driver.findElement(By.xpath(".//tr[.//a[text()='" + username + "']]//a[img[@alt='Edit']]"));
         playerEditLink.click();
-    }
 
-    public void searchPlayerByUsername(String username) {
-        clearAndFillFieldWithValue("//input[contains(@id, 'login') and not(contains(@id, 'last'))]", username);
-
-        WebElement searchBtn = driver.findElement(By.name("search"));
-        searchBtn.click();
+        return InsertOrEditPlayerPage.openEditPlayerPage(driver);
     }
 
     public void deletePlayer(String username){
+        searchPlayerByUsername(username);
         WebElement deleteLink = driver.findElement(By.xpath(".//tr[.//a[text()='"
-                + username + "']]//a[.//img[@alt='Delete']]"));
+                    + username + "']]//a[.//img[@alt='Delete']]"));
         deleteLink.click();
         //click "OK" on alert
         driver.switchTo().alert().accept();
@@ -53,6 +57,7 @@ public class PlayersPage extends BasePage{
 
     //checks the presence of certain player in the search result table
     public boolean doesTableContainPlayer(String username) {
+        searchPlayerByUsername(username);
         try {
             driver.findElement(By.xpath(".//tr[.//a[text()='"
                     + username + "']]"));
@@ -69,5 +74,12 @@ public class PlayersPage extends BasePage{
         }catch(Exception e){
             return null;
         }
+    }
+
+    private void searchPlayerByUsername(String username) {
+        clearAndFillFieldWithValue("//input[contains(@id, 'login') and not(contains(@id, 'last'))]", username);
+
+        WebElement searchBtn = driver.findElement(By.name("search"));
+        searchBtn.click();
     }
 }

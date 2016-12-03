@@ -38,14 +38,14 @@ public class LoginTests {
         loginPage.login("admin", "123");
 
         Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after login");
-        Assert.assertNotEquals(driver.getCurrentUrl(), loginPage.getUrl(), "Wrong URL after login");
+        Assert.assertNotEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "Wrong URL after login");
     }
 
     @Test
     public void negativeTestWrongPassword(){
         loginPage.login("admin", "321");
 
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getUrl(), "You are not on login page.");
+        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
         Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering wrong password");
         Assert.assertEquals(loginPage.getUsernameErrorMessage(),
                 "Invalid username or password",
@@ -57,7 +57,7 @@ public class LoginTests {
 
         loginPage.login("notadmin", "123");
 
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getUrl(), "You are not on login page.");
+        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
         Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering wrong login");
         Assert.assertEquals(loginPage.getUsernameErrorMessage(),
                 "Invalid username or password",
@@ -70,7 +70,7 @@ public class LoginTests {
 
         loginPage.login("", "123");
 
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getUrl(), "You are not on login page.");
+        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
         Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering empty value in login field");
         Assert.assertEquals(loginPage.getUsernameErrorMessage(),
                 "Value is required and can't be empty",
@@ -83,7 +83,7 @@ public class LoginTests {
 
         loginPage.login("admin", "");
 
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getUrl(), "You are not on login page.");
+        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
         Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering empty value in password field");
         Assert.assertEquals(loginPage.getPasswordErrorMessage(),
                 "Value is required and can't be empty",
@@ -96,7 +96,7 @@ public class LoginTests {
 
         loginPage.login("", "");
 
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getUrl(), "You are not on login page.");
+        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
         Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering empty values in fields");
         Assert.assertEquals(loginPage.getUsernameErrorMessage(),
                 "Value is required and can't be empty",

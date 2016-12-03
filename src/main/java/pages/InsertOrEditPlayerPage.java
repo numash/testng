@@ -10,20 +10,27 @@ import org.openqa.selenium.WebElement;
  * Created by numash on 02.12.2016.
  */
 public class InsertOrEditPlayerPage extends BasePage{
-    public static final String insertPlayerUrl = "players/insert";
-    public static final String updatePlayerUrl = "players/edit";
-    private String relativeUrl;
 
-    public InsertOrEditPlayerPage(WebDriver driver, String relativeUrl) {
+    private InsertOrEditPlayerPage(WebDriver driver) {
         super(driver);
-        this.relativeUrl = relativeUrl;
+    }
+
+    public static InsertOrEditPlayerPage openInsertPlayerPage(WebDriver driver){
+        InsertOrEditPlayerPage page = new InsertOrEditPlayerPage(driver);
+        page.openInsertPlayerPage();
+
+        return page;
+    }
+
+    public static InsertOrEditPlayerPage openEditPlayerPage(WebDriver driver){
+        return new InsertOrEditPlayerPage(driver);
     }
 
     protected String getRelativeUrl() {
-        return relativeUrl;
+        return "players/insert";
     }
 
-    public void openInsertPlayerPage(){
+    private void openInsertPlayerPage(){
         driver.get(getFullUrl());
     }
 
@@ -41,6 +48,22 @@ public class InsertOrEditPlayerPage extends BasePage{
         fillUpdatePlayerForm(player);
 
         clickSaveButton();
+    }
+
+    public PokerPlayer readPokerPlayerFromPage(){
+        PokerPlayer player = new PokerPlayer(
+                getUsernameFieldValue(),
+                getEmailFieldValue(),
+                getFirstNameFieldValue(),
+                getLastNameFieldValue(),
+                getCityFieldValue(),
+                getCountryValue(),
+                getAddressFieldValue(),
+                getPhoneFieldValue(),
+                getGenderValue(),
+                getBirthdayFieldValue()
+        );
+        return player;
     }
 
     public void setUsernameFieldValue(String username){
