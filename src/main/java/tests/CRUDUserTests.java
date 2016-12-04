@@ -149,8 +149,6 @@ public class CRUDUserTests extends BaseTests{
         InsertOrEditPlayerPage viewPlayerPage = playersPage.openViewPlayerPage(player.getUsername());
         PokerPlayer actualPlayer = viewPlayerPage.readPokerPlayerFromPage();
 
-        viewPlayerPage.closePage();
-
         softAssert.assertEquals(actualPlayer, player, "Wrong data in view page after creating player.");
         softAssert.assertAll();
     }
