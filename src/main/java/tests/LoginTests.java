@@ -44,7 +44,7 @@ public class LoginTests {
      * 4. Verify that title of the page equals to "Players"
      * 5. Verify that the URL not equals to Login page URL
      */
-    @Test
+    @Test (groups = "login")
     public void positiveLoginTest(){
         loginPage.login("admin", "123");
 
@@ -61,7 +61,7 @@ public class LoginTests {
      * 5. Verify that title of the page equals to "Login"
      * 6. Verify that error message "Invalid username or password" appears
      */
-    @Test
+    @Test (groups = "login")
     public void negativeTestWrongPassword(){
         loginPage.login("admin", "321");
 
@@ -81,7 +81,7 @@ public class LoginTests {
      * 5. Verify that title of the page equals to "Login"
      * 6. Verify that error message "Invalid username or password" appears
      */
-    @Test
+    @Test (groups = "login")
     public void negativeTestWrongLogin(){
 
         loginPage.login("notadmin", "123");
@@ -103,7 +103,7 @@ public class LoginTests {
      * 5. Verify that title of the page equals to "Login"
      * 6. Verify that error message "Value is required and can't be empty" appears
      */
-    @Test
+    @Test (groups = "login")
     public void negativeTestEmptyUsernameField(){
 
         loginPage.login("", "123");
@@ -125,7 +125,7 @@ public class LoginTests {
      * 5. Verify that title of the page equals to "Login"
      * 6. Verify that error message "Value is required and can't be empty" appears
      */
-    @Test
+    @Test (groups = "login")
     public void negativeTestEmptyPasswordField(){
 
         loginPage.login("admin", "");
@@ -148,7 +148,7 @@ public class LoginTests {
      * 6. Verify that error message "Value is required and can't be empty" under username field appears
      * 7. 6. Verify that error message "Value is required and can't be empty" under password field appears
      */
-    @Test
+    @Test (groups = "login")
     public void negativeTestEmptyFields(){
 
         loginPage.login("", "");

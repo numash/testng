@@ -18,11 +18,22 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by numash on 02.12.2016.
+ *
+ * Minimum "Username" field value is 3
+ * Maximum "Username" field value is 12
+ * Allowed characters are: digits (0-9), letters (A-Z and a-z), underscores, hyphens and periods
+ * Minimum "Password" field value is 6
+ *
+ * To create a user:
+ * 1. Open Player-Insert page.
+ * 2. Fill the fields with valid random data.
+ * 3. Click "Save" button
  */
 public class CRUDUserTests {
     //declare global driver var
     private WebDriver driver;
     private SoftAssert softAssert;
+    private RandomManager randomManager;
 
     /**
      * Precondition:
@@ -31,13 +42,14 @@ public class CRUDUserTests {
     @BeforeTest
     public void beforeTest(){
         driver = new FirefoxDriver();
+        randomManager = new RandomManager();
 
         LoginPage loginPage = LoginPage.loginPage(driver);
         loginPage.login("admin", "123");
 
-        //TODO wait until clickable
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        //TODO wait until clickable
     }
 
     /**
@@ -58,15 +70,15 @@ public class CRUDUserTests {
      * 5. Verify that the URL not equals to Player-Edit page URL
      */
     @Test (groups = "createPlayer")
-    public void positiveCreatePlayerRedirectsToPlayersPage(){
+    public void createPlayerRedirectsToPlayersPage(){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "pass_Word68");
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after user creating.");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player.");
         Assert.assertNotEquals(driver.getCurrentUrl(), insertPlayerPage.getFullUrl(),
-                "Wrong URL after user creating. You are still on the Player-Insert page.");
+                "Wrong URL after player creating. You are still on the Player-Insert page.");
     }
 
     /**
@@ -74,12 +86,11 @@ public class CRUDUserTests {
      * 1. Open Player-Insert page.
      * 2. Fill the fields with valid random data.
      * 3. Click "Save" button
-     * 4. On the Players page fill the "Player" field with username from step 1. Click "Search"
+     * 4. On the Players page fill the "Player" field with username from step 2. Click "Search"
      * 5. Verify result table contains player.
      */
-
     @Test (groups = "createPlayer")
-    public void positiveCreatedPlayerInsertsInPlayersTable(){
+    public void createdPlayerInsertsInPlayersTable(){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
@@ -88,7 +99,7 @@ public class CRUDUserTests {
         //open "Players" page
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
 
-        Assert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Table doesn't contain user after creating.");
+        Assert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Table doesn't contain player after creating.");
     }
 
     /**
@@ -96,13 +107,13 @@ public class CRUDUserTests {
      * 1. Open Player-Insert page.
      * 2. Fill the fields with valid random data.
      * 3. Click "Save" button
-     * 4. On the Players page fill the "Player" field with username from step 1. Click "Search"
+     * 4. On the Players page fill the "Player" field with username from step 2. Click "Search"
      * 5. Open player edit page.
-     * 6. Verify player data equals to data from step 1.
+     * 6. Verify player data equals to data from step 2.
      */
 
     @Test (groups = "createPlayer")
-    public void positiveCreatePlayerIsCorrectlySaved(){
+    public void createdPlayerIsCorrectlySaved(){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
@@ -119,13 +130,126 @@ public class CRUDUserTests {
 
     /**
      * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value 3 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithMinimumUsernameLength(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomAlphaAndNumberString(3));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with minimum username length.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value 12 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithMaximumUsernameLength(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomAlphaAndNumberString(12));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with maximum username length.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value that contains alpha characters only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithUsernameContainsAlphaCharactersOnly(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomAlphaString(8));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with username that contains alpha characters only.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value that contains numbers only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithUsernameContainsNumbersOnly(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomNumberString(8));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with username that contains numbers only.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value that contains numbers only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithUsernameContainsAllowedSpecialCharactersOnly(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomAllowedSpecialCharacterString(8));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with username that contains allowed special characters only.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields with random value 6 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithMinimumPasswordLength(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaAndNumberString(6);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with minimum username length.");
+    }
+
+    /**
+     * Steps to reproduce:
      * 1. Create player
      * 2. Open player edit window
      * 3. Update player with new random data
      * 4. Verify that title of the page equals to "Players"
      * 5. Verify that the URL not equals to Player-Edit page URL
      */
-
     @Test (groups = "updatePlayer")
     public void positiveUpdatePlayerRedirectsToPlayersPage(){
         PokerPlayer player = createRandomPokerPlayer();
@@ -139,8 +263,8 @@ public class CRUDUserTests {
         updatePlayerData(player);
         editPlayerPage.updatePlayer(player);
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after updating user.");
-        Assert.assertEquals(driver.getCurrentUrl(), playersPage.getFullUrl(), "Wrong url after updating user (you probably still on Player-Edit page).");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after updating player.");
+        Assert.assertEquals(driver.getCurrentUrl(), playersPage.getFullUrl(), "Wrong url after updating player (you probably still on Player-Edit page).");
     }
 
     /**
@@ -167,7 +291,7 @@ public class CRUDUserTests {
         editPlayerPage.updatePlayer(player);
 
         playersPage.refresh();
-        Assert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Table doesn't contain user after updating.");
+        Assert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Table doesn't contain player after updating.");
     }
 
     /**
@@ -179,7 +303,6 @@ public class CRUDUserTests {
      * 5. Open player edit page.
      * 6. Verify player data equals to new data.
      */
-
     @Test (groups = "updatePlayer")
     public void positiveUpdatePlayerIsCorrectlySaved(){
         //create player
@@ -221,7 +344,7 @@ public class CRUDUserTests {
         playersPage.deletePlayer(player.getUsername());
 
         //check flash message
-        softAssert.assertEquals(playersPage.getFlashMessage(), "Player has been deleted", "No flash message after deleting (probably player wasn't deleted).");
+        softAssert.assertEquals(playersPage.getFlashMessage(), "Player has been deleted", "No flash message after deleting player (probably player wasn't deleted).");
     }
 
     /**
@@ -249,6 +372,99 @@ public class CRUDUserTests {
     }
 
     /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value 2 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Username is less than 3 characters long" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithUsernameLengthLessThanMinimum(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomAlphaAndNumberString(2));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with less than minimum username length (probably player was created).");
+        String validationMessage = "Username: '" + player.getUsername() + "' is less than 3 characters long";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating user"
+            + "with 2 character username (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value 13 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Username is more than 12 characters long" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithUsernameLengthGreaterThanMaximum(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomAlphaAndNumberString(13));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with greater than maximum username length (probably player was created).");
+        String validationMessage = "Username: '" + player.getUsername() + "' is more than 12 characters long";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
+                + "with 13 character username (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value 13 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Username is more than 12 characters long" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmptyUsernameField(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername("");
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with empty username (probably player was created).");
+        String validationMessage = "Value is required and can't be empty";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
+                + "with empty username field (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the username field with random value that contains special character
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithUsernameContainsNotAllowedCharacters(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setUsername(randomManager.getRandomNotAllowedSpecialCharacterString(8));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with username that contains special characters.");
+        String validationMessage = "Username: Contains invalid characters. Allowed ones are: digits (0-9), letters (A-Z and a-z), underscores, hyphens and periods";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
+                + "with username contains not allowed characters (probably player was created).");
+    }
+
+
+
+    /**
      * Postcondition:
      * 1. Close browser.
      */
@@ -259,16 +475,15 @@ public class CRUDUserTests {
 
     //fills poker player fields with random data
     private PokerPlayer createRandomPokerPlayer() {
-        RandomManager randomManager = new RandomManager();
 
         return new PokerPlayer(
-                "user68_" + randomManager.getRandomString(5),
-                "user68_" + randomManager.getRandomString(5) + "@gmail.com",
-                "first" + randomManager.getRandomString(5),
-                "last" + randomManager.getRandomString(5),
+                "user68_" + randomManager.getRandomAlphaAndNumberString(5),
+                "user68_" + randomManager.getRandomAlphaAndNumberString(5) + "@gmail.com",
+                "first" + randomManager.getRandomAlphaAndNumberString(5),
+                "last" + randomManager.getRandomAlphaAndNumberString(5),
                 "City.",
                 "UKRAINE",
-                "Address68, " + randomManager.getRandomString(5),
+                "Address68, " + randomManager.getRandomAlphaAndNumberString(5),
                 "+312345678, 890",
                 "Male",
                 //"10-10-1990");

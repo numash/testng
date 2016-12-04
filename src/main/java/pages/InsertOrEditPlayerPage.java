@@ -159,6 +159,15 @@ public class InsertOrEditPlayerPage extends BasePage{
         return driver.findElement(By.xpath(".//input[contains(@id, 'birthday')]")).getAttribute("Value");
     }
 
+    public String getFieldValidationMessage(String fieldName) {
+        try {
+            WebElement message = driver.findElement(By.xpath(".//*[contains(@class, 'errors')]/ul/li[contains(text(), ':" + fieldName + "')]"));
+            return message.getText();
+        }catch(Exception e){
+            return null;
+        }
+    }
+
     private void fillUpdatePlayerForm(PokerPlayer player){
         setEmailFieldValue(player.getEmail());
         setFirstNameFieldValue(player.getFirstname());
@@ -175,5 +184,4 @@ public class InsertOrEditPlayerPage extends BasePage{
         WebElement saveBtn = driver.findElement(By.name("button_save"));
         saveBtn.click();
     }
-
 }

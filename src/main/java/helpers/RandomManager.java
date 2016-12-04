@@ -9,19 +9,43 @@ import java.util.Random;
  */
 public class RandomManager {
     private Random randomNumber;
-    private String alphabet = "1234567890abcdefghijklmnopqrstuvwxyz";
+    private static final String alphaMixedCaseCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ";
+    private static final String numbers = "1234567890";
+    private static final String allowedSpecialCharacters = "_.-";
+    private static final String notAllowedSpecialCharacters = " !\"#$%&'()*+,/:;<=>?@[\\]^`{|}~";
 
     public RandomManager() {
         randomNumber = new Random();
     }
 
     //generates random string of a certain length
-    public String getRandomString(int length) {
-        String randomString = "";
-        for (int i = 0; i < length; i++) {
-            randomString += alphabet.charAt(randomNumber.nextInt(alphabet.length()));
-        }
-        return randomString;
+    public String getRandomAlphaString(int length) {
+        String alphabet = alphaMixedCaseCharacters;
+        return getRandomString(length, alphabet);
+    }
+
+    //generates random string of a certain length
+    public String getRandomAlphaAndNumberString(int length) {
+        String alphabet = alphaMixedCaseCharacters + numbers;
+        return getRandomString(length, alphabet);
+    }
+
+    //generates random string of a certain length
+    public String getRandomAllowedSpecialCharacterString(int length) {
+        String alphabet = allowedSpecialCharacters;
+        return getRandomString(length, alphabet);
+    }
+
+    //generates random string of a certain length
+    public String getRandomNotAllowedSpecialCharacterString(int length) {
+        String alphabet = notAllowedSpecialCharacters;
+        return getRandomString(length, alphabet);
+    }
+
+    //generates random number string of a certain length
+    public String getRandomNumberString(int length) {
+        String alphabet = numbers;
+        return getRandomString(length, alphabet);
     }
 
     //generates random date
@@ -35,9 +59,16 @@ public class RandomManager {
         int day = randBetween(1, calendar.getActualMaximum(calendar.DAY_OF_MONTH));
 
         calendar.set(year, month, day);
-
-        System.out.println(dfDateTime.format(calendar.getTime()));
         return dfDateTime.format(calendar.getTime());
+    }
+
+    //generates random string of a certain length and characters
+    private String getRandomString(int length, String alphabet) {
+        String randomString = "";
+        for (int i = 0; i < length; i++) {
+            randomString += alphabet.charAt(randomNumber.nextInt(alphabet.length()));
+        }
+        return randomString;
     }
 
     private int randBetween(int start, int end) {
