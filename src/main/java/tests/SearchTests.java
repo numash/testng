@@ -1,5 +1,6 @@
 package tests;
 
+import entities.PokerPlayer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterTest;
@@ -7,14 +8,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import pages.InsertOrEditPlayerPage;
 import pages.LoginPage;
+import pages.PlayersPage;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by numash on 03.12.2016.
  */
-public class SearchTests {
+public class SearchTests extends BaseTests{
     //declare global driver var
     private WebDriver driver;
     private SoftAssert softAssert;
@@ -51,8 +54,17 @@ public class SearchTests {
      * 4. Verify result table contains player
      */
     @Test (groups = "search")
-    public void positiveSearchPlayerByUsername(){
-        //TODO implement, maybe create player before test?
+    public void searchPlayerByUsername(){
+        //create player
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.searchPlayerByUsername(player.getUsername());
+
+        softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by username returned no results.");
     }
 
     /**
@@ -63,20 +75,17 @@ public class SearchTests {
      * 4. Verify result table contains player
      */
     @Test (groups = "search")
-    public void positiveSearchPlayerByEmail(){
-        //TODO implement
-    }
+    public void searchPlayerByEmail(){
+        //create player
+        PokerPlayer player = createRandomPokerPlayer();
 
-    /**
-     * Steps to reproduce:
-     * 1. Create player
-     * 2. Set "Country" field to player's country
-     * 3. Click "Search"
-     * 4. Verify result table contains player
-     */
-    @Test (groups = "search")
-    public void positiveSearchPlayerByCountry(){
-        //TODO implement
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.searchPlayerByEmail(player.getEmail());
+
+        softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getEmail()), "Search by email returned no results.");
     }
 
     /**
@@ -87,8 +96,17 @@ public class SearchTests {
      * 4. Verify result table contains player
      */
     @Test (groups = "search")
-    public void positiveSearchPlayerByCity(){
-        //TODO implement
+    public void searchPlayerByCity(){
+        //create player
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.searchPlayerByCity(player.getCity());
+
+        softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by city returned no results.");
     }
 
     /**
@@ -99,8 +117,17 @@ public class SearchTests {
      * 4. Verify result table contains player
      */
     @Test (groups = "search")
-    public void positiveSearchPlayerByFirstName(){
-        //TODO implement
+    public void searchPlayerByFirstName(){
+        //create player
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.searchPlayerByFirstName(player.getFirstname());
+
+        softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by first name returned no results.");
     }
 
     /**
@@ -111,7 +138,27 @@ public class SearchTests {
      * 4. Verify result table contains player
      */
     @Test (groups = "search")
-    public void positiveSearchPlayerByLastName(){
+    public void searchPlayerByLastName(){
+        //create player
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.searchPlayerByLastName(player.getLastname());
+
+        softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by last name returned no results.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Fill the fields on search form with random data
+     * 2. Click on "Reset" button
+     * 3. Verify all fields are empty
+     */
+    @Test
+    public void resetButtonClearsAllFields(){
         //TODO implement
     }
 

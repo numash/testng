@@ -178,6 +178,10 @@ public class InsertOrEditPlayerPage extends BasePage{
         }
     }
 
+    public void closePage(){
+        driver.close();
+    }
+
     private void fillUpdatePlayerForm(PokerPlayer player){
         setEmailFieldValue(player.getEmail());
         setFirstNameFieldValue(player.getFirstname());

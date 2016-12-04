@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by numash on 30.11.2016.
  */
-public class LoginTests {
+public class LoginTests extends BaseTests {
     //declare global driver var
     private WebDriver driver;
     private LoginPage loginPage;

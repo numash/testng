@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  * 2. Fill the fields with valid random data.
  * 3. Click "Save" button
  */
-public class CRUDUserTests {
+public class CRUDUserTests extends BaseTests{
     //declare global driver var
     private WebDriver driver;
     private SoftAssert softAssert;
@@ -50,7 +50,6 @@ public class CRUDUserTests {
 
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        //TODO wait until clickable
     }
 
     /**
@@ -99,6 +98,7 @@ public class CRUDUserTests {
 
         //open "Players" page
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.searchPlayerByUsername(player.getUsername());
 
         Assert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Table doesn't contain player after creating.");
     }
@@ -149,7 +149,9 @@ public class CRUDUserTests {
         InsertOrEditPlayerPage viewPlayerPage = playersPage.openViewPlayerPage(player.getUsername());
         PokerPlayer actualPlayer = viewPlayerPage.readPokerPlayerFromPage();
 
-        softAssert.assertEquals(actualPlayer, player, "Wrong data after creating player.");
+        viewPlayerPage.closePage();
+
+        softAssert.assertEquals(actualPlayer, player, "Wrong data in view page after creating player.");
         softAssert.assertAll();
     }
 
@@ -232,7 +234,7 @@ public class CRUDUserTests {
     /**
      * Steps to reproduce:
      * 1. Open Player-Insert page.
-     * 2. Fill the username field with random value that contains numbers only
+     * 2. Fill the username field with random value that contains special characters only
      * 3. Fill other fields with valid random data.
      * 4. Click "Save" button
      * 5. Verify that title of the page equals to "Players"
@@ -387,7 +389,7 @@ public class CRUDUserTests {
     /**
      * Steps to reproduce:
      * 1. Open Player-Insert page.
-     * 2. Fill the email field with random value that contains special characters only
+     * 2. Fill the email field with random value that contains special characters in local part
      * 3. Fill other fields with valid random data.
      * 4. Click "Save" button
      * 5. Verify that title of the page equals to "Players"
@@ -401,7 +403,7 @@ public class CRUDUserTests {
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "password68");
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains special characters only.");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains special characters in local part.");
     }
 
     /**
@@ -413,7 +415,7 @@ public class CRUDUserTests {
      * 5. Verify that the URL not equals to Player-Edit page URL
      */
     @Test (groups = "updatePlayer")
-    public void positiveUpdatePlayerRedirectsToPlayersPage(){
+    public void updatingPlayerRedirectsToPlayersPage(){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
@@ -437,9 +439,8 @@ public class CRUDUserTests {
      * 4. On the Players page fill the "Player" field with player username. Click "Search"
      * 5. Verify result table contains player.
      */
-
     @Test (groups = "updatePlayer")
-    public void positiveUpdatePlayerKeepsPlayerInPlayersTable(){
+    public void updatingPlayerKeepsPlayerInPlayersTable(){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
@@ -453,6 +454,8 @@ public class CRUDUserTests {
         editPlayerPage.updatePlayer(player);
 
         playersPage.refresh();
+        playersPage.searchPlayerByUsername(player.getUsername());
+
         Assert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Table doesn't contain player after updating.");
     }
 
@@ -466,7 +469,7 @@ public class CRUDUserTests {
      * 6. Verify player data equals to new data.
      */
     @Test (groups = "updatePlayer")
-    public void positiveUpdatePlayerIsCorrectlySaved(){
+    public void updatedPlayerIsCorrectlySaved(){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
@@ -492,18 +495,18 @@ public class CRUDUserTests {
      * 1. Create player
      * 2. On the Players page fill the "Player" field with player username. Click "Search"
      * 3. Click on player's "Delete" link.
-     * 4. Verify message "Player has been deleted" has appeared
+     * 4. Click "Ok" on popup window
+     * 5. Verify message "Player has been deleted" has appeared
      */
-
     @Test (groups = "deletePlayer")
-    public void positiveDeletePlayerShowsMessage(){
+    public void deletingPlayerShowsMessage(){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "pass_Word68");
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
-        playersPage.deletePlayer(player.getUsername());
+        playersPage.deletePlayer(player.getUsername(), "Ok");
 
         //check flash message
         softAssert.assertEquals(playersPage.getFlashMessage(), "Player has been deleted", "No flash message after deleting player (probably player wasn't deleted).");
@@ -514,22 +517,52 @@ public class CRUDUserTests {
      * 1. Create player
      * 2. On the Players page fill the "Player" field with player username. Click "Search"
      * 3. Click on player's "Delete" link
-     * 6. On the Players page fill the "Player" field with player username. Click "Search"
-     * 7. Verify table doesn't contain player.
+     * 4. Click "Ok" on popup window
+     * 5. On the Players page fill the "Player" field with player username. Click "Search"
+     * 6. Verify table doesn't contain player.
      */
     @Test (groups = "deletePlayer")
-    public void positiveDeletePlayerDeletesPlayerFromPlayersTable(){
+    public void deletingPlayerDeletesPlayerFromPlayersTable(){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "pass_Word68");
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
-        playersPage.deletePlayer(player.getUsername());
+        playersPage.deletePlayer(player.getUsername(), "Ok");
         playersPage.refresh();
+
+        playersPage.searchPlayerByUsername(player.getUsername());
 
         //check result table
         softAssert.assertFalse(playersPage.doesTableContainPlayer(player.getUsername()), "Player wasn't deleted.");
+        softAssert.assertAll();
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Create player
+     * 2. On the Players page fill the "Player" field with player username. Click "Search"
+     * 3. Click on player's "Delete" link
+     * 4. Click "Отмена" on popup window
+     * 5. On the Players page fill the "Player" field with player username. Click "Search"
+     * 6. Verify table contains player.
+     */
+    @Test (groups = "deletePlayer")
+    public void deletingAndClickingCancelDoesNotDeletePlayer(){
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+        playersPage.deletePlayer(player.getUsername(), "Cansel");
+        playersPage.refresh();
+
+        playersPage.searchPlayerByUsername(player.getUsername());
+
+        //check result table
+        softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Player was deleted.");
         softAssert.assertAll();
     }
 
@@ -608,7 +641,7 @@ public class CRUDUserTests {
      * 2. Fill the username field with random value that contains special character
      * 3. Fill other fields with valid random data.
      * 4. Click "Save" button
-     * 5. Verify that title of the page equals to "Players"
+     * 5. Verify that validation message "Username Contains invalid characters" is shown
      */
     @Test (groups = "createPlayer")
     public void createPlayerWithUsernameContainsNotAllowedCharacters(){
@@ -775,7 +808,7 @@ public class CRUDUserTests {
      * 3. Fill other fields with valid random data.
      * 4. Click "Save" button
      * 5. Verify that title of the page equals to "Players-Insert"
-     * 6. Verify that validation message "Email is no valid email address in the basic format local-part@hostname" is shown
+     * 6. Verify that validation message "Email value is required and can't be empty" is shown
      */
     @Test (groups = "createPlayer")
     public void createPlayerWithEmptyEmail(){
@@ -792,6 +825,68 @@ public class CRUDUserTests {
     }
 
     /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the fields with valid random data.
+     * 3. Click "Save" button
+     * 4. On the Players page fill the "Player" field with username from step 2. Click "Search"
+     * 5. Open player edit page.
+     * 6. Fill the email field with invalid value. Click "Save" button.
+     * 7. Verify that title of the page equals to "Players-Insert"
+     * 8. Verify that validation message "Email is no valid email address in the basic format local-part@hostname" is shown
+     */
+    @Test (groups = "updatePlayer")
+    public void updatePlayerWithInvalidEmail(){
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+
+        InsertOrEditPlayerPage editPlayerPage = playersPage.openEditPlayerPage(player.getUsername());
+        String randomEmail = randomManager.getRandomNotAllowedSpecialCharacterString(8);
+        player.setEmail(randomEmail);
+        editPlayerPage.updatePlayer(player);
+
+        Assert.assertEquals(driver.getTitle(), "Players - Edit", "Wrong title after creating player with invalid email (probably player was created).");
+        String validationMessage = "E-mail: '" + randomEmail + "' is no valid email address in the basic format local-part@hostname";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after updating player"
+                + "with invalid email field (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the fields with valid random data.
+     * 3. Click "Save" button
+     * 4. On the Players page fill the "Player" field with username from step 2. Click "Search"
+     * 5. Open player edit page.
+     * 6. Fill the email field with "" value. Click "Save" button.
+     * 7. Verify that title of the page equals to "Players-Insert"
+     * 8. Verify that validation message "Email value is required and can't be empty" is shown
+     */
+    @Test (groups = "updatePlayer")
+    public void updatePlayerWithEmptyEmail(){
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+
+        InsertOrEditPlayerPage editPlayerPage = playersPage.openEditPlayerPage(player.getUsername());
+        player.setEmail("");
+        editPlayerPage.updatePlayer(player);
+
+        Assert.assertEquals(driver.getTitle(), "Players - Edit", "Wrong title after creating player with invalid email (probably player was created).");
+        String validationMessage = "E-mail: Value is required and can't be empty";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after updating player"
+                + "with empty email field (probably player was created).");
+    }
+
+
+    /**
      * Postcondition:
      * 1. Close browser.
      */
@@ -800,34 +895,5 @@ public class CRUDUserTests {
         driver.quit();
     }
 
-    //fills poker player fields with random data
-    private PokerPlayer createRandomPokerPlayer() {
 
-        return new PokerPlayer(
-                "user68_" + randomManager.getRandomAlphaAndNumberString(5),
-                "user68_" + randomManager.getRandomAlphaAndNumberString(5) + "@gmail.com",
-                "first" + randomManager.getRandomAlphaAndNumberString(5),
-                "last" + randomManager.getRandomAlphaAndNumberString(5),
-                "City.",
-                "UKRAINE",
-                "Address68, " + randomManager.getRandomAlphaAndNumberString(5),
-                "+312345678, 890",
-                "Male",
-                //"10-10-1990");
-                randomManager.getRandomDate());
-    }
-
-    private void updatePlayerData(PokerPlayer player){
-        PokerPlayer randomPlayer = createRandomPokerPlayer();
-
-        player.setEmail(randomPlayer.getEmail());
-        player.setFirstname(randomPlayer.getFirstname());
-        player.setLastname(randomPlayer.getLastname());
-        player.setAddress(randomPlayer.getAddress());
-        player.setCity(randomPlayer.getCity());
-        player.setCountry(randomPlayer.getCountry());
-        player.setPhone(randomPlayer.getPhone());
-        player.setGender(randomPlayer.getGender());
-        player.setBirthday(randomPlayer.getBirthday());
-    }
 }

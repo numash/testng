@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="PokerTestSuite">
+
+    <test name="Login">
+        <groups>
+            <run>
+                <exclude name="login"/>
+            </run>
+        </groups>
+
+        <classes>
+            <class name="tests.LoginTests" />
+        </classes>
+    </test>
+
+    <test name="CRUD" enabled="true">
+        <groups>
+            <run>
+                <include name="createPlayer"/>
+                <exclude name="updatePlayer"/>
+                <exclude name="deletePlayer"/>
+            </run>
+        </groups>
+
+        <classes>
+            <class name="tests.CRUDUserTests" />
+        </classes>
+    </test>
+
+    <test name="Search">
+        <groups>
+            <run>
+                <exclude name="search"/>
+            </run>
+        </groups>
+
+        <classes>
+            <class name="tests.SearchTests" />
+        </classes>
+    </test>
+
+</suite>
