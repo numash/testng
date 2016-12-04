@@ -45,6 +45,16 @@ public class InsertOrEditPlayerPage extends BasePage{
         clickSaveButton();
     }
 
+    public void createPlayer(PokerPlayer player, String password, String confirmPassword){
+        setUsernameFieldValue(player.getUsername());
+        setPasswordFieldValue(password);
+        setConfirmPasswordFieldValue(confirmPassword);
+
+        fillUpdatePlayerForm(player);
+
+        clickSaveButton();
+    }
+
     public void updatePlayer(PokerPlayer player) {
         fillUpdatePlayerForm(player);
 

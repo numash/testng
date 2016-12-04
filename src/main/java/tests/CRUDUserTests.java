@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
  * Maximum "Username" field value is 12
  * Allowed characters are: digits (0-9), letters (A-Z and a-z), underscores, hyphens and periods
  * Minimum "Password" field value is 6
+ * Maximum "Password" field value is 30
  *
  * To create a user:
  * 1. Open Player-Insert page.
@@ -111,7 +112,6 @@ public class CRUDUserTests {
      * 5. Open player edit page.
      * 6. Verify player data equals to data from step 2.
      */
-
     @Test (groups = "createPlayer")
     public void createdPlayerIsCorrectlySaved(){
         PokerPlayer player = createRandomPokerPlayer();
@@ -123,6 +123,31 @@ public class CRUDUserTests {
 
         InsertOrEditPlayerPage editPlayerPage = playersPage.openEditPlayerPage(player.getUsername());
         PokerPlayer actualPlayer = editPlayerPage.readPokerPlayerFromPage();
+
+        softAssert.assertEquals(actualPlayer, player, "Wrong data after creating player.");
+        softAssert.assertAll();
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the fields with valid random data.
+     * 3. Click "Save" button
+     * 4. On the Players page fill the "Player" field with username from step 2. Click "Search"
+     * 5. Open player view page.
+     * 6. Verify player data equals to data from step 2.
+     */
+    @Test (groups = "createPlayer")
+    public void createdPlayerIsCorrectlyShowsInViewPage(){
+        PokerPlayer player = createRandomPokerPlayer();
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "pass_Word68");
+
+        PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
+
+        InsertOrEditPlayerPage viewPlayerPage = playersPage.openViewPlayerPage(player.getUsername());
+        PokerPlayer actualPlayer = viewPlayerPage.readPokerPlayerFromPage();
 
         softAssert.assertEquals(actualPlayer, player, "Wrong data after creating player.");
         softAssert.assertAll();
@@ -239,7 +264,144 @@ public class CRUDUserTests {
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, password);
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with minimum username length.");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with minimum password length.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields with random value 30 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithMaximumPasswordLength(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaAndNumberString(30);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with maximum password length.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields  with random value that contains alpha characters only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithPasswordContainsAlphaCharactersOnly(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaString(8);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with password that contains alpha characters only.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields with random value that contains numbers only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithPasswordContainsNumbersOnly(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomNumberString(8);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with password that contains numbers only.");
+    }
+
+    /**
+     * This test always fails because special characters are not allowed, but I think it's incorrect for password field
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields with random value that contains special characters only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    /*@Test (groups = "createPlayer")
+    public void createPlayerWithPasswordContainsSpecialCharactersOnly(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAllSpecialCharacterString(8);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with password that contains special characters only.");
+    }*/
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the email field with random value that contains alpha characters only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmailContainsAlphaCharacters(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String randomAlphaEmail = randomManager.getRandomEmail(8, RandomManager.alphaMixedCaseCharacters, RandomManager.alphaMixedCaseCharacters);
+        player.setEmail(randomAlphaEmail);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains alpha characters only.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the email field with random value that contains numbers only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmailContainsNumbers(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String randomNumberEmail = randomManager.getRandomEmail(8, RandomManager.numbers, RandomManager.numbers);
+        player.setEmail(randomNumberEmail);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains numbers only.");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the email field with random value that contains special characters only
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players"
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmailContainsSpecialCharactersInLocalPart(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String randomSpecialCharactersEmail = randomManager.getRandomEmail(8, RandomManager.emailSpecialCharacters, RandomManager.alphaMixedCaseCharacters);
+        player.setEmail(randomSpecialCharactersEmail);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains special characters only.");
     }
 
     /**
@@ -420,8 +582,8 @@ public class CRUDUserTests {
     /**
      * Steps to reproduce:
      * 1. Open Player-Insert page.
-     * 2. Fill the username field with random value 13 characters long
-     * 3. Fill other fields with valid random data.
+     * 2. Fill the username field with "" value
+     * 3. Fill other fields with valid random data
      * 4. Click "Save" button
      * 5. Verify that title of the page equals to "Players-Insert"
      * 6. Verify that validation message "Username is more than 12 characters long" is shown
@@ -435,7 +597,7 @@ public class CRUDUserTests {
         insertPlayerPage.createPlayer(player, "pass_Word68");
 
         Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with empty username (probably player was created).");
-        String validationMessage = "Value is required and can't be empty";
+        String validationMessage = "Username: Value is required and can't be empty";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
                 + "with empty username field (probably player was created).");
     }
@@ -462,7 +624,172 @@ public class CRUDUserTests {
                 + "with username contains not allowed characters (probably player was created).");
     }
 
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields with random value 5 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Password is less than 6 characters long" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithPasswordLengthLessThanMinimum(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaAndNumberString(5);
 
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with less than minimum password length (probably player was created).");
+        String validationMessage = "Password: '*****' is less than 6 characters long";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Password"), validationMessage, "No validation message after creating user"
+                + "with 5 character password (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password and confirm password fields with random value 31 characters long
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Password is more than 30 characters long" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithPasswordLengthGreaterThanMaximum(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaAndNumberString(31);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password);
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with greater than maximum username length (probably player was created).");
+
+        String validationMessage = "Password: '*******************************' is more than 30 characters long";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Password"), validationMessage, "No validation message after creating player"
+                + "with 31 character password (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password field with "" value
+     * 3. Fill the confirm password field with random value 8 characters long
+     * 4. Fill other fields with valid random data.
+     * 5. Click "Save" button
+     * 6. Verify that title of the page equals to "Players-Insert"
+     * 7. Verify that validation message "Password: Value is required and can't be empty" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmptyPasswordField(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String confirmPassword = randomManager.getRandomAlphaAndNumberString(8);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "", confirmPassword);
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with empty password (probably player was created).");
+        String validationMessage = "Password: Value is required and can't be empty";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Password"), validationMessage, "No validation message after creating player"
+                + "with empty password field (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password field with random value 8 characters long
+     * 3. Fill the confirm password field with "" value
+     * 4. Fill other fields with valid random data.
+     * 5. Click "Save" button
+     * 6. Verify that title of the page equals to "Players-Insert"
+     * 7. Verify that validation message "Confirm Password: Value is required and can't be empty" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmptyConfirmPasswordField(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaAndNumberString(8);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password, "");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with empty confirm password (probably player was created).");
+        String validationMessage = "Confirm Password: Value is required and can't be empty";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Confirm Password"), validationMessage, "No validation message after creating player"
+                + "with empty confirm password field (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the password field with random value 8 characters long
+     * 3. Fill the confirm password field with another random value 8 characters long
+     * 4. Fill other fields with valid random data.
+     * 5. Click "Save" button
+     * 6. Verify that title of the page equals to "Players-Insert"
+     * 7. Verify that validation message "Confirm Password: Does not match Password" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithDifferentPasswordAndConfirmPasswordFields(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String password = randomManager.getRandomAlphaAndNumberString(8);
+        String confirmPassword = randomManager.getRandomAlphaAndNumberString(8);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, password, confirmPassword);
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with different password and confirm password (probably player was created).");
+        String validationMessage = "Confirm Password: Does not match Password";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Confirm Password"), validationMessage, "No validation message after creating player"
+                + "with empty confirm password field (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the email field with invalid value
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Email is no valid email address in the basic format local-part@hostname" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithInvalidEmail(){
+        PokerPlayer player = createRandomPokerPlayer();
+        String randomAlphaEmail = randomManager.getRandomAlphaString(8);
+        player.setEmail(randomAlphaEmail);
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with invalid email (probably player was created).");
+        String validationMessage = "E-mail: '" + randomAlphaEmail + "' is no valid email address in the basic format local-part@hostname";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after creating player"
+                + "with invalid email field (probably player was created).");
+    }
+
+    /**
+     * Steps to reproduce:
+     * 1. Open Player-Insert page.
+     * 2. Fill the email field with "" value.
+     * 3. Fill other fields with valid random data.
+     * 4. Click "Save" button
+     * 5. Verify that title of the page equals to "Players-Insert"
+     * 6. Verify that validation message "Email is no valid email address in the basic format local-part@hostname" is shown
+     */
+    @Test (groups = "createPlayer")
+    public void createPlayerWithEmptyEmail(){
+        PokerPlayer player = createRandomPokerPlayer();
+        player.setEmail(randomManager.getRandomAlphaString(8));
+
+        InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
+        insertPlayerPage.createPlayer(player, "password68");
+
+        Assert.assertEquals(driver.getTitle(), "Players - Insert", "Wrong title after creating player with empty email (probably player was created).");
+        String validationMessage = "E-mail: Value is required and can't be empty";
+        softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after creating player"
+                + "with empty email field (probably player was created).");
+    }
 
     /**
      * Postcondition:

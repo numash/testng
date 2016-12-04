@@ -47,6 +47,18 @@ public class PlayersPage extends BasePage{
         return InsertOrEditPlayerPage.openEditPlayerPage(driver);
     }
 
+    public InsertOrEditPlayerPage openViewPlayerPage(String username) {
+        searchPlayerByUsername(username);
+        WebElement playerViewLink = driver.findElement(By.xpath(".//a[text()='" + username + "']"));
+        playerViewLink.click();
+
+        for (String windowHandle : driver.getWindowHandles()) {
+            driver.switchTo().window(windowHandle);
+        }
+
+        return InsertOrEditPlayerPage.openEditPlayerPage(driver);
+    }
+
     public void deletePlayer(String username){
         searchPlayerByUsername(username);
         WebElement deleteLink = driver.findElement(By.xpath(".//tr[.//a[text()='"

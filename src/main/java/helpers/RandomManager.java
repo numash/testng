@@ -9,10 +9,16 @@ import java.util.Random;
  */
 public class RandomManager {
     private Random randomNumber;
-    private static final String alphaMixedCaseCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ";
-    private static final String numbers = "1234567890";
-    private static final String allowedSpecialCharacters = "_.-";
-    private static final String notAllowedSpecialCharacters = " !\"#$%&'()*+,/:;<=>?@[\\]^`{|}~";
+
+    private static final String[] domains = {"com", "org", "ru", "ua", "localhost", "localserver"};
+
+    public static final String alphaMixedCaseCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ";
+    public static final String numbers = "1234567890";
+
+    public static final String allowedSpecialCharacters = "_.-";
+    public static final String notAllowedSpecialCharacters = " !\"#$%&'()*+,/:;<=>?@[\\]^`{|}~";
+    public static final String emailSpecialCharacters = "!#$%&'*+-/=?^_`{|}~";
+
 
     public RandomManager() {
         randomNumber = new Random();
@@ -27,6 +33,11 @@ public class RandomManager {
     //generates random string of a certain length
     public String getRandomAlphaAndNumberString(int length) {
         String alphabet = alphaMixedCaseCharacters + numbers;
+        return getRandomString(length, alphabet);
+    }
+
+    public String getRandomAllSpecialCharacterString(int length) {
+        String alphabet = allowedSpecialCharacters + notAllowedSpecialCharacters;
         return getRandomString(length, alphabet);
     }
 
@@ -60,6 +71,13 @@ public class RandomManager {
 
         calendar.set(year, month, day);
         return dfDateTime.format(calendar.getTime());
+    }
+
+    public String getRandomEmail(int localLength, String localPartAlphabet, String domainAlphabet){
+        String localPart = getRandomString(localLength, localPartAlphabet);
+        String domain = getRandomString(5, domainAlphabet) + "." + domains[randomNumber.nextInt(domains.length)];
+
+        return localPart + "@" + domain;
     }
 
     //generates random string of a certain length and characters
