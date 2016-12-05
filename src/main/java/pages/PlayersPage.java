@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * Created by numash on 30.11.2016.
  */
 public class PlayersPage extends BasePage{
+    private String winHandleBefore;
 
     public PlayersPage(WebDriver driver) {
         super(driver);
@@ -57,12 +58,13 @@ public class PlayersPage extends BasePage{
     }
 
     public InsertOrEditPlayerPage openViewPlayerPage(String username) {
+        winHandleBefore = driver.getWindowHandle();
         searchPlayerByUsername(username);
         WebElement playerViewLink = driver.findElement(By.xpath(".//a[text()='" + username + "']"));
         playerViewLink.click();
 
-        for (String windowHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(windowHandle);
+        for (String winHandle : driver.getWindowHandles()) {
+            driver.switchTo().window(winHandle);
         }
 
         InsertOrEditPlayerPage page = InsertOrEditPlayerPage.openEditPlayerPage(driver);
@@ -71,6 +73,11 @@ public class PlayersPage extends BasePage{
         wait.until(ExpectedConditions.elementToBeClickable(By.name("button_ok")));
 
         return page;
+    }
+
+    public void closeViewPlayerPage(){
+        driver.close();
+        driver.switchTo().window(winHandleBefore);
     }
 
     public void deletePlayer(String username, String answer){

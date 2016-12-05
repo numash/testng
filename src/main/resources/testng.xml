@@ -3,23 +3,23 @@
 
 <suite name="PokerTestSuite">
 
-    <test name="Login">
+    <!--<test name="Login">
         <groups>
             <run>
-                <exclude name="login"/>
+                <include name="login"/>
             </run>
         </groups>
 
         <classes>
             <class name="tests.LoginTests" />
         </classes>
-    </test>
+    </test>-->
 
     <test name="CRUD" enabled="true">
         <groups>
             <run>
                 <include name="createPlayer"/>
-                <exclude name="updatePlayer"/>
+                <include name="updatePlayer"/>
                 <exclude name="deletePlayer"/>
             </run>
         </groups>
@@ -29,16 +29,16 @@
         </classes>
     </test>
 
-    <test name="Search">
+    <!--<test name="Search">
         <groups>
             <run>
-                <exclude name="search"/>
+                <include name="search"/>
             </run>
         </groups>
 
         <classes>
             <class name="tests.SearchTests" />
         </classes>
-    </test>
+    </test>-->
 
 </suite>

@@ -26,7 +26,7 @@ public class SearchTests extends BaseTests{
      * Precondition:
      * 1. Login to the system with "admin" login and "123" password.
      */
-    @BeforeTest
+    @BeforeTest (alwaysRun = true)
     public void beforeTest(){
         driver = new FirefoxDriver();
 
@@ -41,7 +41,7 @@ public class SearchTests extends BaseTests{
      * Precondition:
      * 1. Create new instance of SoftAssert
      */
-    @BeforeMethod
+    @BeforeMethod (alwaysRun = true)
     public void beforeMethod(){
         softAssert = new SoftAssert();
     }
@@ -166,7 +166,7 @@ public class SearchTests extends BaseTests{
      * Postcondition:
      * 1. Close browser.
      */
-    @AfterTest
+    @AfterTest (alwaysRun = true)
     public void afterTest(){
         driver.quit();
     }

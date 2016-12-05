@@ -10,7 +10,7 @@ import java.util.Random;
 public class RandomManager {
     private Random randomNumber;
 
-    private static final String[] domains = {"com", "org", "ru", "ua", "localhost", "localserver"};
+    private static final String[] domains = {"com", "org", "ru", "ua"};
 
     public static final String alphaMixedCaseCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ";
     public static final String numbers = "1234567890";

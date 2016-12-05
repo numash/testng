@@ -19,7 +19,7 @@ public class LoginTests extends BaseTests {
     private WebDriver driver;
     private LoginPage loginPage;
 
-    @BeforeTest
+    @BeforeTest (alwaysRun = true)
     public void beforeTest(){
         driver = new FirefoxDriver();
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
@@ -30,7 +30,7 @@ public class LoginTests extends BaseTests {
      * Precondition:
      * 1. Open application Login page
      */
-    @BeforeMethod
+    @BeforeMethod (alwaysRun = true)
     public void beforeMethod(){
         //open poker url
         loginPage = LoginPage.loginPage(driver);
@@ -168,7 +168,7 @@ public class LoginTests extends BaseTests {
      * Postcondition:
      * 1. Close browser.
      */
-    @AfterTest
+    @AfterTest (alwaysRun = true)
     public void afterTest(){
         driver.quit();
     }

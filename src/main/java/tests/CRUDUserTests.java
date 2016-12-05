@@ -40,7 +40,7 @@ public class CRUDUserTests extends BaseTests{
      * Precondition:
      * 1. Login to the system with "admin" login and "123" password.
      */
-    @BeforeTest
+    @BeforeTest (alwaysRun = true)
     public void beforeTest(){
         driver = new FirefoxDriver();
         randomManager = new RandomManager();
@@ -56,7 +56,7 @@ public class CRUDUserTests extends BaseTests{
      * Precondition:
      * 1. Create new instance of SoftAssert
      */
-    @BeforeMethod
+    @BeforeMethod (alwaysRun = true)
     public void beforeMethod(){
         softAssert = new SoftAssert();
     }
@@ -148,6 +148,7 @@ public class CRUDUserTests extends BaseTests{
 
         InsertOrEditPlayerPage viewPlayerPage = playersPage.openViewPlayerPage(player.getUsername());
         PokerPlayer actualPlayer = viewPlayerPage.readPokerPlayerFromPage();
+        playersPage.closeViewPlayerPage();
 
         softAssert.assertEquals(actualPlayer, player, "Wrong data in view page after creating player.");
         softAssert.assertAll();
@@ -361,7 +362,7 @@ public class CRUDUserTests extends BaseTests{
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "password68");
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains alpha characters only.");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with " + randomAlphaEmail + " email that contains alpha characters only.");
     }
 
     /**
@@ -381,7 +382,7 @@ public class CRUDUserTests extends BaseTests{
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "password68");
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains numbers only.");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with " + randomNumberEmail + " email that contains numbers only.");
     }
 
     /**
@@ -401,7 +402,7 @@ public class CRUDUserTests extends BaseTests{
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
         insertPlayerPage.createPlayer(player, "password68");
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with email that contains special characters in local part.");
+        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player with " + randomSpecialCharactersEmail + " email that contains special characters in local part.");
     }
 
     /**
@@ -888,7 +889,7 @@ public class CRUDUserTests extends BaseTests{
      * Postcondition:
      * 1. Close browser.
      */
-    @AfterTest
+    @AfterTest (alwaysRun = true)
     public void afterTest(){
         driver.quit();
     }
