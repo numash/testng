@@ -509,6 +509,7 @@ public class CRUDUserTests extends BaseTests{
 
         //check flash message
         softAssert.assertEquals(playersPage.getFlashMessage(), "Player has been deleted", "No flash message after deleting player (probably player wasn't deleted).");
+        softAssert.assertAll();
     }
 
     /**
@@ -586,6 +587,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Username: '" + player.getUsername() + "' is less than 3 characters long";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating user"
             + "with 2 character username (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -609,6 +611,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Username: '" + player.getUsername() + "' is more than 12 characters long";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
                 + "with 13 character username (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -632,6 +635,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Username: Value is required and can't be empty";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
                 + "with empty username field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -654,6 +658,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Username: Contains invalid characters. Allowed ones are: digits (0-9), letters (A-Z and a-z), underscores, hyphens and periods";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Username"), validationMessage, "No validation message after creating player"
                 + "with username contains not allowed characters (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -677,6 +682,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Password: '*****' is less than 6 characters long";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Password"), validationMessage, "No validation message after creating user"
                 + "with 5 character password (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -701,6 +707,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Password: '*******************************' is more than 30 characters long";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Password"), validationMessage, "No validation message after creating player"
                 + "with 31 character password (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -725,6 +732,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Password: Value is required and can't be empty";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Password"), validationMessage, "No validation message after creating player"
                 + "with empty password field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -749,6 +757,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Confirm Password: Value is required and can't be empty";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Confirm Password"), validationMessage, "No validation message after creating player"
                 + "with empty confirm password field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -774,6 +783,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "Confirm Password: Does not match Password";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("Confirm Password"), validationMessage, "No validation message after creating player"
                 + "with empty confirm password field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -798,6 +808,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "E-mail: '" + randomAlphaEmail + "' is no valid email address in the basic format local-part@hostname";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after creating player"
                 + "with invalid email field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -821,6 +832,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "E-mail: Value is required and can't be empty";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after creating player"
                 + "with empty email field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -852,6 +864,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "E-mail: '" + randomEmail + "' is no valid email address in the basic format local-part@hostname";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after updating player"
                 + "with invalid email field (probably player was created).");
+        softAssert.assertAll();
     }
 
     /**
@@ -882,6 +895,7 @@ public class CRUDUserTests extends BaseTests{
         String validationMessage = "E-mail: Value is required and can't be empty";
         softAssert.assertEquals(insertPlayerPage.getFieldValidationMessage("E-mail"), validationMessage, "No validation message after updating player"
                 + "with empty email field (probably player was created).");
+        softAssert.assertAll();
     }
 
 
