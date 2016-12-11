@@ -1,40 +1,27 @@
 package tests;
 
 import entities.PokerPlayer;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.InsertOrEditPlayerPage;
 import pages.LoginPage;
 import pages.PlayersPage;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by numash on 03.12.2016.
  */
 public class SearchTests extends BaseTests{
-    //declare global driver var
-    private WebDriver driver;
     private SoftAssert softAssert;
 
     /**
      * Precondition:
      * 1. Login to the system with "admin" login and "123" password.
      */
-    @BeforeTest (alwaysRun = true)
-    public void beforeTest(){
-        driver = new FirefoxDriver();
-
+    @Parameters({"usernameParameter", "passwordParameter"})
+    @BeforeTest (alwaysRun = true, dependsOnGroups = "positiveLogin")
+    public void beforeTest(String username, String password){
         LoginPage loginPage = LoginPage.loginPage(driver);
-        loginPage.login("admin", "123");
-
-        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        loginPage.login(username, password);
     }
 
     /**
@@ -53,13 +40,14 @@ public class SearchTests extends BaseTests{
      * 3. Click "Search"
      * 4. Verify result table contains player
      */
+    @Parameters({"usernameParameter"})
     @Test (groups = "search")
-    public void searchPlayerByUsername(){
+    public void searchPlayerByUsername(String password){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByUsername(player.getUsername());

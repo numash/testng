@@ -2,13 +2,8 @@ package tests;
 
 import entities.PokerPlayer;
 import helpers.RandomManager;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.InsertOrEditPlayerPage;
 import pages.LoginPage;
@@ -31,25 +26,19 @@ import java.util.concurrent.TimeUnit;
  * 3. Click "Save" button
  */
 public class CRUDUserTests extends BaseTests{
-    //declare global driver var
-    private WebDriver driver;
     private SoftAssert softAssert;
-    private RandomManager randomManager;
 
     /**
      * Precondition:
      * 1. Login to the system with "admin" login and "123" password.
      */
+    @Parameters({"usernameParameter", "passwordParameter"})
     @BeforeTest (alwaysRun = true)
-    public void beforeTest(){
-        driver = new FirefoxDriver();
-        randomManager = new RandomManager();
-
+    public void beforeTest(String username, String password){
         LoginPage loginPage = LoginPage.loginPage(driver);
-        loginPage.login("admin", "123");
+        loginPage.login(username, password);
 
-        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        randomManager = new RandomManager();
     }
 
     /**
@@ -125,7 +114,7 @@ public class CRUDUserTests extends BaseTests{
         PokerPlayer actualPlayer = editPlayerPage.readPokerPlayerFromPage();
 
         softAssert.assertEquals(actualPlayer, player, "Wrong data after creating player.");
-        softAssert.assertAll();
+        softAssert.assertAll();             //never in afterMethod!
     }
 
     /**

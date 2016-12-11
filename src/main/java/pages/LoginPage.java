@@ -1,13 +1,26 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.CacheLookup;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * Created by numash on 30.11.2016.
  */
 public class LoginPage extends BasePage{
+
+    @FindBy(id = "username")
+    private WebElement usernameField;
+    @FindBy(id = "password")
+    private WebElement passwordField;
+    @FindBy(id = "logIn")
+    private WebElement loginBtn;
+    @FindBy(xpath = "//*[@id='username-element']/ul[@class='errors']/li")
+    private WebElement usernameErrorMessageField;
+    @FindBy(xpath = "//*[@id='password-element']/ul[@class='errors']/li")
+    private WebElement passwordErrorMessageField;
 
     public LoginPage(WebDriver driver){
         super(driver);
@@ -19,13 +32,15 @@ public class LoginPage extends BasePage{
 
     //initialize a new instance and open page
     public static LoginPage loginPage(WebDriver driver){
+
         LoginPage page = new LoginPage(driver);
         page.open();
 
+        PageFactory.initElements(driver, page);
         return page;
     }
 
-    private void open(){
+    public void open(){
         driver.get(getFullUrl());
     }
 
@@ -36,34 +51,24 @@ public class LoginPage extends BasePage{
     }
 
     public void setUsername(String username){
-        WebElement usernameField = driver.findElement(By.id("username"));
         usernameField.clear();
         usernameField.sendKeys(username);
     }
 
     public void setPassword(String password) {
-        WebElement passwordField = driver.findElement(By.id("password"));
         passwordField.clear();
         passwordField.sendKeys(password);
     }
 
     public void clickOnLogin() {
-        WebElement loginBtn = driver.findElement(By.id("logIn"));
         loginBtn.click();
     }
 
-    /*public String getErrorMessage(){
-        WebElement errorField = driver.findElement(By.xpath("//ul[@class='errors']/li"));
-        return errorField.getText();
-    }*/
-
     public String getUsernameErrorMessage(){
-        WebElement errorField = driver.findElement(By.xpath("//*[@id='username-element']/ul[@class='errors']/li"));
-        return errorField.getText();
+        return usernameErrorMessageField.getText();
     }
 
     public String getPasswordErrorMessage(){
-        WebElement errorField = driver.findElement(By.xpath("//*[@id='password-element']/ul[@class='errors']/li"));
-        return errorField.getText();
+        return passwordErrorMessageField.getText();
     }
 }

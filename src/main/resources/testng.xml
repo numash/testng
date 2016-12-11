@@ -1,21 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="PokerTestSuite">
+<suite name="PokerTestSuite" verbose="1" > <!--verbose - log volume-->
 
-    <!--<test name="Login">
-        <groups>
-            <run>
-                <include name="login"/>
-            </run>
-        </groups>
+    <parameter name="usernameParameter" value="admin"/>
+    <parameter name="passwordParameter" value="123"/>
+    <parameter name="titleParameter" value="Players"/>
+    <parameter name="playerPasswordParameter" value="pass_Word68"/>
+
+    <test name="Login" enabled="false">
+        <classes>
+            <class name="tests.LoginTests">
+                <methods>
+                    <include name="positiveLoginTest"/>
+                    <include name="negativeLoginTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Create" enabled="false">
+        <classes>
+            <class name="tests.CRUDUserTests">
+                <methods>
+                    <include name="createPlayerRedirectsToPlayersPage"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Search" enabled="true">
+        <classes>
+            <class name="tests.SearchTests">
+            </class>
+        </classes>
+    </test>
+
+    <!-- ================================================================
+    <test name="Login1">
+        <parameter name="usernameParameter" value="admin"></parameter>
+        <parameter name="passwordParameter" value="123"></parameter>
+        <parameter name="titleParameter" value="Players"></parameter>
 
         <classes>
-            <class name="tests.LoginTests" />
+            <class name="tests.ExampleTests">
+            </class>
         </classes>
-    </test>-->
+    </test>
 
-    <test name="CRUD" enabled="true">
+    <test name="Login2">
+        <parameter name="usernameParameter" value="admin"></parameter>
+        <parameter name="passwordParameter" value="1234"></parameter>
+        <parameter name="titleParameter" value="Players"></parameter>
+
+        <classes>
+            <class name="tests.ExampleTests">
+            </class>
+        </classes>
+    </test>
+    ==================================================================-->
+
+    <!--<test name="CRUD" enabled="true">
         <groups>
             <run>
                 <include name="createPlayer"/>
@@ -27,7 +72,7 @@
         <classes>
             <class name="tests.CRUDUserTests" />
         </classes>
-    </test>
+    </test>-->
 
     <!--<test name="Search">
         <groups>

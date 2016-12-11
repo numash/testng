@@ -5,11 +5,58 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * Created by numash on 02.12.2016.
  */
 public class InsertOrEditPlayerPage extends BasePage{
+
+    @FindBy(xpath = "//input[contains(@id, 'login')]")
+    private WebElement usernameInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'email')]")
+    private WebElement emailInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'password') and not(contains(@id, 'confirm'))]")
+    private WebElement passwordInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'confirm_password')]")
+    private WebElement confirmPasswordInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'fname')]")
+    private WebElement firstNameInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'lname')]")
+    private WebElement lastNameInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'city')]")
+    private WebElement cityInput;
+
+    @FindBy(xpath = "//select[contains(@id, 'us_country')]")
+    private WebElement countrySelect;
+
+    @FindBy(xpath = "//textarea[contains(@id, 'us_address')]")
+    private WebElement addressInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'us_phone')]")
+    private WebElement phoneInput;
+
+    @FindBy(xpath = ".//select[contains(@id, 'gender')]")
+    private WebElement genderSelect;
+
+    @FindBy(xpath = ".//input[contains(@id, 'birthday')]")
+    private WebElement birthdayInput;
+
+    @FindBy(xpath = "//select[contains(@id, 'us_country')]/option[@selected='selected']")
+    private WebElement selectedCountryOption;
+
+    @FindBy(xpath = "//select[contains(@id, 'gender')]/option[@selected='selected']")
+    private WebElement selectedGenderOption;
+
+    @FindBy(name = "button_save")
+    private WebElement saveButton;
 
     private InsertOrEditPlayerPage(WebDriver driver) {
         super(driver);
@@ -20,6 +67,7 @@ public class InsertOrEditPlayerPage extends BasePage{
         InsertOrEditPlayerPage page = new InsertOrEditPlayerPage(driver);
         page.openInsertPlayerPage();
 
+        PageFactory.initElements(driver, page);
         return page;
     }
 
@@ -78,95 +126,95 @@ public class InsertOrEditPlayerPage extends BasePage{
     }
 
     public void setUsernameFieldValue(String username){
-        clearAndFillFieldWithValue("//input[contains(@id, 'login')]", username);
+        clearAndFillFieldWithValue(usernameInput, username);
     }
 
     public void setEmailFieldValue(String email){
-        clearAndFillFieldWithValue("//input[contains(@id, 'email')]", email);
+        clearAndFillFieldWithValue(emailInput, email);
     }
 
     public void setPasswordFieldValue(String password){
-        clearAndFillFieldWithValue("//input[contains(@id, 'password') and not(contains(@id, 'confirm'))]", password);
+        clearAndFillFieldWithValue(passwordInput, password);
     }
 
     public void setConfirmPasswordFieldValue(String password){
-        clearAndFillFieldWithValue("//input[contains(@id, 'confirm_password')]", password);
+        clearAndFillFieldWithValue(confirmPasswordInput, password);
     }
 
     public void setFirstNameFieldValue(String firstName){
-        clearAndFillFieldWithValue("//input[contains(@id, 'fname')]", firstName);
+        clearAndFillFieldWithValue(firstNameInput, firstName);
     }
 
     public void setLastNameFieldValue(String lastName){
-        clearAndFillFieldWithValue("//input[contains(@id, 'lname')]", lastName);
+        clearAndFillFieldWithValue(lastNameInput, lastName);
     }
 
     public void setCityFieldValue(String city){
-        clearAndFillFieldWithValue("//input[contains(@id, 'city')]", city);
+        clearAndFillFieldWithValue(cityInput, city);
     }
 
     public void setCountryValue(String country){
-        fillFieldWithValue("//select[contains(@id, 'us_country')]", country);
+        fillFieldWithValue(countrySelect, country);
     }
 
     public void setAddressFieldValue(String address){
-        clearAndFillFieldWithValue("//textarea[contains(@id, 'us_address')]", address);
+        clearAndFillFieldWithValue(addressInput, address);
     }
 
     public void setPhoneFieldValue(String phone){
-        clearAndFillFieldWithValue("//input[contains(@id, 'us_phone')]", phone);
+        clearAndFillFieldWithValue(phoneInput, phone);
     }
 
     public void setGenderValue(String gender){
-        fillFieldWithValue(".//select[contains(@id, 'gender')]", gender);
+        fillFieldWithValue(genderSelect, gender);
     }
 
     public void setBirthdayFieldValue(String birthday){
-        clearAndFillFieldWithValue(".//input[contains(@id, 'birthday')]", birthday);
+        clearAndFillFieldWithValue(birthdayInput, birthday);
     }
 
     public String getUsernameFieldValue(){
-        return driver.findElement(By.xpath("//input[contains(@id, 'login')]")).getAttribute("Value");
+        return usernameInput.getAttribute("Value");
     }
 
     public String getEmailFieldValue(){
-        return driver.findElement(By.xpath("//input[contains(@id, 'email')]")).getAttribute("Value");
+        return emailInput.getAttribute("Value");
     }
 
     public String getFirstNameFieldValue(){
-        return driver.findElement(By.xpath("//input[contains(@id, 'fname')]")).getAttribute("Value");
+        return firstNameInput.getAttribute("Value");
     }
 
     public String getLastNameFieldValue(){
-        return driver.findElement(By.xpath("//input[contains(@id, 'lname')]")).getAttribute("Value");
+        return lastNameInput.getAttribute("Value");
     }
 
     public String getCityFieldValue(){
-        return driver.findElement(By.xpath("//input[contains(@id, 'us_city')]")).getAttribute("Value");
+        return cityInput.getAttribute("Value");
     }
 
     public String getCountryValue(){
         try {
-            return driver.findElement(By.xpath("//select[contains(@id, 'us_country')]/option[@selected='selected']")).getText();
+            return selectedCountryOption.getText();
         } catch(NoSuchElementException e){
             return "";
         }
     }
 
     public String getAddressFieldValue(){
-        return driver.findElement(By.xpath("//textarea[contains(@id, 'us_address')]")).getText();
+        return addressInput.getText();
     }
 
     public String getPhoneFieldValue(){
-        return driver.findElement(By.xpath("//input[contains(@id, 'us_phone')]")).getAttribute("Value");
+        return phoneInput.getAttribute("Value");
     }
 
     public String getGenderValue(){
-        return driver.findElement(By.xpath("//select[contains(@id, 'gender')]/option[@selected='selected']")).getText();
+        return selectedGenderOption.getText();
     }
 
     public String getBirthdayFieldValue(){
-        return driver.findElement(By.xpath(".//input[contains(@id, 'birthday')]")).getAttribute("Value");
+        return birthdayInput.getAttribute("Value");
     }
 
     public String getFieldValidationMessage(String fieldName) {
@@ -190,7 +238,6 @@ public class InsertOrEditPlayerPage extends BasePage{
     }
 
     private void clickSaveButton(){
-        WebElement saveBtn = driver.findElement(By.name("button_save"));
-        saveBtn.click();
+        saveButton.click();
     }
 }

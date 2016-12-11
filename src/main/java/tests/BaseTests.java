@@ -2,12 +2,32 @@ package tests;
 
 import entities.PokerPlayer;
 import helpers.RandomManager;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeSuite;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by numash on 04.12.2016.
  */
 public class BaseTests {
-    private RandomManager randomManager = new RandomManager();
+    protected RandomManager randomManager = new RandomManager();
+
+    //declare global driver var
+    protected static WebDriver driver;
+    /**
+     * Preconditions:
+     * 1. Open browser
+     */
+    @BeforeSuite(alwaysRun = true)
+    public void beforeSuite(){
+        driver = new FirefoxDriver();
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    }
 
     //fills poker player fields with random data
     protected PokerPlayer createRandomPokerPlayer() {
@@ -38,5 +58,16 @@ public class BaseTests {
         player.setPhone(randomPlayer.getPhone());
         player.setGender(randomPlayer.getGender());
         player.setBirthday(randomPlayer.getBirthday());
+    }
+
+
+
+    /**
+     * Postcondition:
+     * 1. Close browser.
+     */
+    @AfterSuite(alwaysRun = true)
+    public void afterSuite(){
+        driver.quit();
     }
 }

@@ -3,10 +3,8 @@ package tests;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 import pages.LoginPage;
 
 import java.util.concurrent.TimeUnit;
@@ -15,16 +13,8 @@ import java.util.concurrent.TimeUnit;
  * Created by numash on 30.11.2016.
  */
 public class LoginTests extends BaseTests {
-    //declare global driver var
-    private WebDriver driver;
     private LoginPage loginPage;
-
-    @BeforeTest (alwaysRun = true)
-    public void beforeTest(){
-        driver = new FirefoxDriver();
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-    }
+    private SoftAssert softAssert;
 
     /**
      * Precondition:
@@ -34,6 +24,7 @@ public class LoginTests extends BaseTests {
     public void beforeMethod(){
         //open poker url
         loginPage = LoginPage.loginPage(driver);
+        softAssert = new SoftAssert();
     }
 
     /**
@@ -44,132 +35,54 @@ public class LoginTests extends BaseTests {
      * 4. Verify that title of the page equals to "Players"
      * 5. Verify that the URL not equals to Login page URL
      */
-    @Test (groups = "login")
-    public void positiveLoginTest(){
-        loginPage.login("admin", "123");
+    @Parameters({"usernameParameter", "passwordParameter", "titleParameter"})
+    @Test (groups="positiveLogin", dependsOnGroups = "negativeLogin")
+    public void positiveLoginTest(String username, String password, String title){
+        loginPage.login(username, password);
 
-        Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after login.");
+        Assert.assertEquals(driver.getTitle(), title, "Wrong title after login.");
         Assert.assertNotEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are still on Login page.");
     }
 
-    /**
-     * Steps to reproduce:
-     * 1. Set username to "admin"
-     * 2. Set password to "321"
-     * 3. Click "Login" button
-     * 4. Verify that the URL equals to Login page URL
-     * 5. Verify that title of the page equals to "Login"
-     * 6. Verify that error message "Invalid username or password" appears
-     */
-    @Test (groups = "login")
-    public void negativeTestWrongPassword(){
-        loginPage.login("admin", "321");
-
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
-        Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering wrong password.");
-        Assert.assertEquals(loginPage.getUsernameErrorMessage(),
-                "Invalid username or password",
-                "Validation error message is not valid when password is wrong.");
+    @DataProvider
+    public Object[][] negativeLoginData(){
+        return new Object[][]{
+                {"admin", "321", "Login", "Invalid username or password", null},
+                {"notadmin", "123", "Login", "Invalid username or password", null},
+                {"admin", "", "Login", null, "Value is required and can't be empty"},
+                {"", "123", "Login", "Value is required and can't be empty", null},
+                {"", "", "Login", "Value is required and can't be empty", "Value is required and can't be empty"}
+        };
     }
 
     /**
      * Steps to reproduce:
-     * 1. Set username to "notadmin"
-     * 2. Set password to "123"
+     * 1. Fill username field
+     * 2. Fill password field
      * 3. Click "Login" button
      * 4. Verify that the URL equals to Login page URL
      * 5. Verify that title of the page equals to "Login"
-     * 6. Verify that error message "Invalid username or password" appears
+     * 6. Verify that error message appears
      */
-    @Test (groups = "login")
-    public void negativeTestWrongLogin(){
-
-        loginPage.login("notadmin", "123");
+    @Test (groups = "negativeLogin", dataProvider = "negativeLoginData")
+    public void negativeLoginTest(String username, String password, String expectedTitle, String expectedUsernameMessage, String expectedPasswordMessage){
+        loginPage.login(username, password);
 
         Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
-        Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering wrong login");
-        Assert.assertEquals(loginPage.getUsernameErrorMessage(),
-                "Invalid username or password",
-                "Validation error message is not valid when login is wrong.");
+        Assert.assertEquals(driver.getTitle(), expectedTitle, "Wrong title after negative login.");
 
-    }
+        if (expectedUsernameMessage != null) {
+            softAssert.assertEquals(loginPage.getUsernameErrorMessage(),
+                    expectedUsernameMessage,
+                    "Username validation error message is not valid.");
+        }
 
-    /**
-     * Steps to reproduce:
-     * 1. Set username to ""
-     * 2. Set password to "123"
-     * 3. Click "Login" button
-     * 4. Verify that the URL equals to Login page URL
-     * 5. Verify that title of the page equals to "Login"
-     * 6. Verify that error message "Value is required and can't be empty" appears
-     */
-    @Test (groups = "login")
-    public void negativeTestEmptyUsernameField(){
+        if(expectedPasswordMessage != null){
+            softAssert.assertEquals(loginPage.getPasswordErrorMessage(),
+                    expectedPasswordMessage,
+                    "Password validation  error message is not valid.");
+        }
 
-        loginPage.login("", "123");
-
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
-        Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering empty value in login field");
-        Assert.assertEquals(loginPage.getUsernameErrorMessage(),
-                "Value is required and can't be empty",
-                "Validation error message is not valid when username field is empty..");
-
-    }
-
-    /**
-     * Steps to reproduce:
-     * 1. Set username to "admin"
-     * 2. Set password to ""
-     * 3. Click "Login" button
-     * 4. Verify that the URL equals to Login page URL
-     * 5. Verify that title of the page equals to "Login"
-     * 6. Verify that error message "Value is required and can't be empty" appears
-     */
-    @Test (groups = "login")
-    public void negativeTestEmptyPasswordField(){
-
-        loginPage.login("admin", "");
-
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
-        Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering empty value in password field");
-        Assert.assertEquals(loginPage.getPasswordErrorMessage(),
-                "Value is required and can't be empty",
-                "Validation error message is not valid when password field is empty.");
-
-    }
-
-    /**
-     * Steps to reproduce:
-     * 1. Set username to ""
-     * 2. Set password to ""
-     * 3. Click "Login" button
-     * 4. Verify that the URL equals to Login page URL
-     * 5. Verify that title of the page equals to "Login"
-     * 6. Verify that error message "Value is required and can't be empty" under username field appears
-     * 7. 6. Verify that error message "Value is required and can't be empty" under password field appears
-     */
-    @Test (groups = "login")
-    public void negativeTestEmptyFields(){
-
-        loginPage.login("", "");
-
-        Assert.assertEquals(driver.getCurrentUrl(), loginPage.getFullUrl(), "You are not on login page.");
-        Assert.assertEquals(driver.getTitle(), "Login", "Wrong title after entering empty values in fields");
-        Assert.assertEquals(loginPage.getUsernameErrorMessage(),
-                "Value is required and can't be empty",
-                "Validation error message is not valid when username field is empty.");
-        Assert.assertEquals(loginPage.getPasswordErrorMessage(),
-                "Value is required and can't be empty",
-                "Validation error message is not valid when password field is empty.");
-
-    }
-
-    /**
-     * Postcondition:
-     * 1. Close browser.
-     */
-    @AfterTest (alwaysRun = true)
-    public void afterTest(){
-        driver.quit();
+        softAssert.assertAll();
     }
 }

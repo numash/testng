@@ -14,27 +14,27 @@ public abstract class BasePage {
 
     protected BasePage(WebDriver driver) {
         this.driver = driver;
-}
+    }
 
     protected abstract String getRelativeUrl();
 
     //finds an element by xpath, clears it and fills it with value
-    protected void clearAndFillFieldWithValue(String fieldXpath, String value) {
-        WebElement field = driver.findElement(By.xpath(fieldXpath));
-        field.clear();
-        field.sendKeys(value);
+    protected void clearAndFillFieldWithValue(WebElement element, String value) {
+        //WebElement field = driver.findElement(By.xpath(fieldXpath));
+        element.clear();
+        element.sendKeys(value);
     }
 
     //finds an element by xpath and fills it with value
-    protected void fillFieldWithValue(String fieldXpath, String value){
-    WebElement field = driver.findElement(By.xpath(fieldXpath));
-        field.sendKeys(value);
+    protected void fillFieldWithValue(WebElement element, String value){
+    //WebElement field = driver.findElement(By.xpath(fieldXpath));
+        element.sendKeys(value);
     }
 
     //finds an element by xpath, clears it and fills it with value
-    protected void clearField(String fieldXpath){
-        WebElement field = driver.findElement(By.xpath(fieldXpath));
-        field.clear();
+    protected void clearField(WebElement element){
+        //WebElement field = driver.findElement(By.xpath(fieldXpath));
+        element.clear();
     }
 
     public String getFullUrl(){

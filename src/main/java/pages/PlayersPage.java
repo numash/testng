@@ -4,6 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,6 +14,31 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * Created by numash on 30.11.2016.
  */
 public class PlayersPage extends BasePage{
+
+    @FindBy(name = "button_ok")
+    private WebElement okButton;
+
+    @FindBy(xpath = ".//*[contains(@id, 'flashmessagespanel')]//*[text()='Player has been deleted']")
+    private WebElement flashMessage;
+
+    @FindBy(xpath = "//input[contains(@id, 'login') and not(contains(@id, 'last'))]")
+    private WebElement loginInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'email')]")
+    private WebElement emailInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'city')]")
+    private WebElement cityInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'firstname')]")
+    private WebElement firstNameInput;
+
+    @FindBy(xpath = "//input[contains(@id, 'lastname')]")
+    private WebElement lastNameInput;
+
+    @FindBy(xpath = "//input[@name='reset']")
+    private WebElement resetButton;
+
     private String winHandleBefore;
 
     public PlayersPage(WebDriver driver) {
@@ -22,6 +50,7 @@ public class PlayersPage extends BasePage{
         PlayersPage page = new PlayersPage(driver);
         page.open();
 
+        PageFactory.initElements(driver, page);
         return page;
     }
 
@@ -37,21 +66,9 @@ public class PlayersPage extends BasePage{
         driver.get(getFullUrl());
     }
 
-    public void clickOnInsertLink(){
-        WebElement insertLink = driver.findElement(By.linkText("Insert"));
-        insertLink.click();
-    }
-
     public InsertOrEditPlayerPage openEditPlayerPage(String username) {
         searchPlayerByUsername(username);
         WebElement playerEditLink = driver.findElement(By.xpath(".//tr[.//a[text()='" + username + "']]//a[img[@alt='Edit']]"));
-        playerEditLink.click();
-
-        return InsertOrEditPlayerPage.openEditPlayerPage(driver);
-    }
-
-    public InsertOrEditPlayerPage openEditPlayerPage() {
-        WebElement playerEditLink = driver.findElement(By.xpath("(.//tr[.//a]//a[img[@alt='Edit']])[1]"));
         playerEditLink.click();
 
         return InsertOrEditPlayerPage.openEditPlayerPage(driver);
@@ -70,7 +87,7 @@ public class PlayersPage extends BasePage{
         InsertOrEditPlayerPage page = InsertOrEditPlayerPage.openEditPlayerPage(driver);
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.elementToBeClickable(By.name("button_ok")));
+        wait.until(ExpectedConditions.elementToBeClickable(okButton));
 
         return page;
     }
@@ -107,8 +124,8 @@ public class PlayersPage extends BasePage{
 
     public String getFlashMessage(){
         try {
-            WebElement message = driver.findElement(By.xpath(".//*[contains(@id, 'flashmessagespanel')]//*[text()='Player has been deleted']"));
-            return message.getText();
+            //WebElement message = driver.findElement(flashMessage));
+            return flashMessage.getText();
         }catch(Exception e){
             return null;
         }
@@ -116,7 +133,7 @@ public class PlayersPage extends BasePage{
 
     public void searchPlayerByUsername(String username) {
         clearAllFields();
-        clearAndFillFieldWithValue("//input[contains(@id, 'login') and not(contains(@id, 'last'))]", username);
+        clearAndFillFieldWithValue(loginInput, username);
 
         WebElement searchBtn = driver.findElement(By.name("search"));
         searchBtn.click();
@@ -124,7 +141,7 @@ public class PlayersPage extends BasePage{
 
     public void searchPlayerByEmail(String email) {
         clearAllFields();
-        clearAndFillFieldWithValue("//input[contains(@id, 'email')]", email);
+        clearAndFillFieldWithValue(emailInput, email);
 
         WebElement searchBtn = driver.findElement(By.name("search"));
         searchBtn.click();
@@ -132,7 +149,7 @@ public class PlayersPage extends BasePage{
 
     public void searchPlayerByCity(String city) {
         clearAllFields();
-        clearAndFillFieldWithValue("//input[contains(@id, 'city')]", city);
+        clearAndFillFieldWithValue(cityInput, city);
 
         WebElement searchBtn = driver.findElement(By.name("search"));
         searchBtn.click();
@@ -140,7 +157,7 @@ public class PlayersPage extends BasePage{
 
     public void searchPlayerByFirstName(String firstName) {
         clearAllFields();
-        clearAndFillFieldWithValue("//input[contains(@id, 'firstname')]", firstName);
+        clearAndFillFieldWithValue(firstNameInput, firstName);
 
         WebElement searchBtn = driver.findElement(By.name("search"));
         searchBtn.click();
@@ -148,22 +165,21 @@ public class PlayersPage extends BasePage{
 
     public void searchPlayerByLastName(String lastName) {
         clearAllFields();
-        clearAndFillFieldWithValue("//input[contains(@id, 'lastname')]", lastName);
+        clearAndFillFieldWithValue(lastNameInput, lastName);
 
         WebElement searchBtn = driver.findElement(By.name("search"));
         searchBtn.click();
     }
 
     public void clearAllFields(){
-        clearField("//input[contains(@id, 'login') and not(contains(@id, 'last'))]");
-        clearField("//input[contains(@id, 'email')]");
-        clearField("//input[contains(@id, 'city')]");
-        clearField("//input[contains(@id, 'firstname')]");
-        clearField("//input[contains(@id, 'lastname')]");
+        clearField(loginInput);
+        clearField(emailInput);
+        clearField(cityInput);
+        clearField(firstNameInput);
+        clearField(lastNameInput);
     }
 
     public void resetFields(){
-        WebElement resetBtn = driver.findElement(By.xpath("//input[@name='reset']"));
-        resetBtn.click();
+        resetButton.click();
     }
 }
