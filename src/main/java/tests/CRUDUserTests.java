@@ -9,8 +9,6 @@ import pages.InsertOrEditPlayerPage;
 import pages.LoginPage;
 import pages.PlayersPage;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by numash on 02.12.2016.
  *
@@ -58,12 +56,13 @@ public class CRUDUserTests extends BaseTests{
      * 4. Verify that title of the page equals to "Players"
      * 5. Verify that the URL not equals to Player-Edit page URL
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "createPlayer")
-    public void createPlayerRedirectsToPlayersPage(){
+    public void createPlayerRedirectsToPlayersPage(String password){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         Assert.assertEquals(driver.getTitle(), "Players", "Wrong title after creating player.");
         Assert.assertNotEquals(driver.getCurrentUrl(), insertPlayerPage.getFullUrl(),
@@ -78,12 +77,13 @@ public class CRUDUserTests extends BaseTests{
      * 4. On the Players page fill the "Player" field with username from step 2. Click "Search"
      * 5. Verify result table contains player.
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "createPlayer")
-    public void createdPlayerInsertsInPlayersTable(){
+    public void createdPlayerInsertsInPlayersTable(String password){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         //open "Players" page
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
@@ -101,12 +101,13 @@ public class CRUDUserTests extends BaseTests{
      * 5. Open player edit page.
      * 6. Verify player data equals to data from step 2.
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "createPlayer")
-    public void createdPlayerIsCorrectlySaved(){
+    public void createdPlayerIsCorrectlySaved(String password){
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
 
@@ -886,16 +887,4 @@ public class CRUDUserTests extends BaseTests{
                 + "with empty email field (probably player was created).");
         softAssert.assertAll();
     }
-
-
-    /**
-     * Postcondition:
-     * 1. Close browser.
-     */
-    @AfterTest (alwaysRun = true)
-    public void afterTest(){
-        driver.quit();
-    }
-
-
 }

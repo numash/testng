@@ -1,13 +1,9 @@
 package tests;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.LoginPage;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by numash on 30.11.2016.

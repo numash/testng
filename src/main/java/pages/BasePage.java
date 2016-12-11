@@ -20,20 +20,17 @@ public abstract class BasePage {
 
     //finds an element by xpath, clears it and fills it with value
     protected void clearAndFillFieldWithValue(WebElement element, String value) {
-        //WebElement field = driver.findElement(By.xpath(fieldXpath));
         element.clear();
         element.sendKeys(value);
     }
 
     //finds an element by xpath and fills it with value
     protected void fillFieldWithValue(WebElement element, String value){
-    //WebElement field = driver.findElement(By.xpath(fieldXpath));
         element.sendKeys(value);
     }
 
     //finds an element by xpath, clears it and fills it with value
     protected void clearField(WebElement element){
-        //WebElement field = driver.findElement(By.xpath(fieldXpath));
         element.clear();
     }
 

@@ -8,7 +8,7 @@
     <parameter name="titleParameter" value="Players"/>
     <parameter name="playerPasswordParameter" value="pass_Word68"/>
 
-    <test name="Login" enabled="false">
+    <test name="Login" enabled="true">
         <classes>
             <class name="tests.LoginTests">
                 <methods>
@@ -19,11 +19,11 @@
         </classes>
     </test>
 
-    <test name="Create" enabled="false">
+    <test name="Create" enabled="true">
         <classes>
             <class name="tests.CRUDUserTests">
                 <methods>
-                    <include name="createPlayerRedirectsToPlayersPage"/>
+                    <include name="deletingPlayerShowsMessage"/>
                 </methods>
             </class>
         </classes>

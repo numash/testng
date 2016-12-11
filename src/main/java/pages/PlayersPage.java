@@ -39,6 +39,9 @@ public class PlayersPage extends BasePage{
     @FindBy(xpath = "//input[@name='reset']")
     private WebElement resetButton;
 
+    @FindBy(name = "search")
+    private WebElement searchButton;
+
     private String winHandleBefore;
 
     public PlayersPage(WebDriver driver) {
@@ -99,9 +102,9 @@ public class PlayersPage extends BasePage{
 
     public void deletePlayer(String username, String answer){
         searchPlayerByUsername(username);
-        WebElement deleteLink = driver.findElement(By.xpath(".//tr[.//a[text()='"
+        WebElement playerDeleteLink = driver.findElement(By.xpath(".//tr[.//a[text()='"
                     + username + "']]//a[.//img[@alt='Delete']]"));
-        deleteLink.click();
+        playerDeleteLink.click();
 
         if (answer.equals("Ok")){
             //click "OK" on alert
@@ -124,7 +127,6 @@ public class PlayersPage extends BasePage{
 
     public String getFlashMessage(){
         try {
-            //WebElement message = driver.findElement(flashMessage));
             return flashMessage.getText();
         }catch(Exception e){
             return null;
@@ -135,40 +137,35 @@ public class PlayersPage extends BasePage{
         clearAllFields();
         clearAndFillFieldWithValue(loginInput, username);
 
-        WebElement searchBtn = driver.findElement(By.name("search"));
-        searchBtn.click();
+        searchButton.click();
     }
 
     public void searchPlayerByEmail(String email) {
         clearAllFields();
         clearAndFillFieldWithValue(emailInput, email);
 
-        WebElement searchBtn = driver.findElement(By.name("search"));
-        searchBtn.click();
+        searchButton.click();
     }
 
     public void searchPlayerByCity(String city) {
         clearAllFields();
         clearAndFillFieldWithValue(cityInput, city);
 
-        WebElement searchBtn = driver.findElement(By.name("search"));
-        searchBtn.click();
+        searchButton.click();
     }
 
     public void searchPlayerByFirstName(String firstName) {
         clearAllFields();
         clearAndFillFieldWithValue(firstNameInput, firstName);
 
-        WebElement searchBtn = driver.findElement(By.name("search"));
-        searchBtn.click();
+        searchButton.click();
     }
 
     public void searchPlayerByLastName(String lastName) {
         clearAllFields();
         clearAndFillFieldWithValue(lastNameInput, lastName);
 
-        WebElement searchBtn = driver.findElement(By.name("search"));
-        searchBtn.click();
+        searchButton.click();
     }
 
     public void clearAllFields(){

@@ -40,7 +40,7 @@ public class SearchTests extends BaseTests{
      * 3. Click "Search"
      * 4. Verify result table contains player
      */
-    @Parameters({"usernameParameter"})
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "search")
     public void searchPlayerByUsername(String password){
         //create player
@@ -53,6 +53,7 @@ public class SearchTests extends BaseTests{
         playersPage.searchPlayerByUsername(player.getUsername());
 
         softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by username returned no results.");
+        softAssert.assertAll();
     }
 
     /**
@@ -62,18 +63,20 @@ public class SearchTests extends BaseTests{
      * 3. Click "Search"
      * 4. Verify result table contains player
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "search")
-    public void searchPlayerByEmail(){
+    public void searchPlayerByEmail(String password){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByEmail(player.getEmail());
 
         softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getEmail()), "Search by email returned no results.");
+        softAssert.assertAll();
     }
 
     /**
@@ -83,18 +86,20 @@ public class SearchTests extends BaseTests{
      * 3. Click "Search"
      * 4. Verify result table contains player
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "search")
-    public void searchPlayerByCity(){
+    public void searchPlayerByCity(String password){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByCity(player.getCity());
 
         softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by city returned no results.");
+        softAssert.assertAll();
     }
 
     /**
@@ -104,18 +109,20 @@ public class SearchTests extends BaseTests{
      * 3. Click "Search"
      * 4. Verify result table contains player
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "search")
-    public void searchPlayerByFirstName(){
+    public void searchPlayerByFirstName(String password){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByFirstName(player.getFirstname());
 
         softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by first name returned no results.");
+        softAssert.assertAll();
     }
 
     /**
@@ -125,18 +132,20 @@ public class SearchTests extends BaseTests{
      * 3. Click "Search"
      * 4. Verify result table contains player
      */
+    @Parameters({"playerPasswordParameter"})
     @Test (groups = "search")
-    public void searchPlayerByLastName(){
+    public void searchPlayerByLastName(String password){
         //create player
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, "pass_Word68");
+        insertPlayerPage.createPlayer(player, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByLastName(player.getLastname());
 
         softAssert.assertTrue(playersPage.doesTableContainPlayer(player.getUsername()), "Search by last name returned no results.");
+        softAssert.assertAll();
     }
 
     /**
