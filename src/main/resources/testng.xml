@@ -20,11 +20,18 @@
     </test>
 
     <test name="Create" enabled="true">
+        <parameter name="positiveExpectedTitle" value="Players"/>
+        <parameter name="insertNegativeExpectedTitle" value="Players - Insert"/>
+        <parameter name="editNegativeExpectedTitle" value="Players - Edit"/>
+        <parameter name="usernameLength" value="8"/>
+        <parameter name="passwordLength" value="8"/>
+        <parameter name="emailLocalLength" value="8"/>
+
         <classes>
             <class name="tests.CRUDUserTests">
-                <methods>
-                    <include name="deletingPlayerShowsMessage"/>
-                </methods>
+                <!--<methods>
+                    <include name="deletingPlayerDeletesPlayerFromPlayersTable"/>
+                </methods>-->
             </class>
         </classes>
     </test>
@@ -35,55 +42,5 @@
             </class>
         </classes>
     </test>
-
-    <!-- ================================================================
-    <test name="Login1">
-        <parameter name="usernameParameter" value="admin"></parameter>
-        <parameter name="passwordParameter" value="123"></parameter>
-        <parameter name="titleParameter" value="Players"></parameter>
-
-        <classes>
-            <class name="tests.ExampleTests">
-            </class>
-        </classes>
-    </test>
-
-    <test name="Login2">
-        <parameter name="usernameParameter" value="admin"></parameter>
-        <parameter name="passwordParameter" value="1234"></parameter>
-        <parameter name="titleParameter" value="Players"></parameter>
-
-        <classes>
-            <class name="tests.ExampleTests">
-            </class>
-        </classes>
-    </test>
-    ==================================================================-->
-
-    <!--<test name="CRUD" enabled="true">
-        <groups>
-            <run>
-                <include name="createPlayer"/>
-                <include name="updatePlayer"/>
-                <exclude name="deletePlayer"/>
-            </run>
-        </groups>
-
-        <classes>
-            <class name="tests.CRUDUserTests" />
-        </classes>
-    </test>-->
-
-    <!--<test name="Search">
-        <groups>
-            <run>
-                <include name="search"/>
-            </run>
-        </groups>
-
-        <classes>
-            <class name="tests.SearchTests" />
-        </classes>
-    </test>-->
 
 </suite>

@@ -16,7 +16,7 @@ public class RandomManager {
     public static final String numbers = "1234567890";
 
     public static final String allowedSpecialCharacters = "_.-";
-    public static final String notAllowedSpecialCharacters = " !\"#$%&'()*+,/:;<=>?@[\\]^`{|}~";
+    public static final String notAllowedSpecialCharacters = " !#$%&'()*+,/:;<=>?@[]^`{|}~";
     public static final String emailSpecialCharacters = "!#$%&'*+-/=?^_`{|}~";
 
 

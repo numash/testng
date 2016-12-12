@@ -6,7 +6,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * Created by numash on 02.12.2016.
@@ -67,7 +66,6 @@ public class InsertOrEditPlayerPage extends BasePage{
         InsertOrEditPlayerPage page = new InsertOrEditPlayerPage(driver);
         page.openInsertPlayerPage();
 
-        PageFactory.initElements(driver, page);
         return page;
     }
 
@@ -81,16 +79,6 @@ public class InsertOrEditPlayerPage extends BasePage{
 
     private void openInsertPlayerPage(){
         driver.get(getFullUrl());
-    }
-
-    public void createPlayer(PokerPlayer player, String password){
-        setUsernameFieldValue(player.getUsername());
-        setPasswordFieldValue(password);
-        setConfirmPasswordFieldValue(password);
-
-        fillUpdatePlayerForm(player);
-
-        clickSaveButton();
     }
 
     public void createPlayer(PokerPlayer player, String password, String confirmPassword){
@@ -219,7 +207,7 @@ public class InsertOrEditPlayerPage extends BasePage{
 
     public String getFieldValidationMessage(String fieldName) {
         try {
-            WebElement message = driver.findElement(By.xpath(".//*[contains(@class, 'errors')]/ul/li[contains(text(), ':" + fieldName + "')]"));
+            WebElement message = driver.findElement(By.xpath(".//*[contains(@class, 'errors')]/ul/li[contains(text(), '" + fieldName + "')]"));
             return message.getText();
         }catch(Exception e){
             return null;

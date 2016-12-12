@@ -5,8 +5,9 @@ import helpers.RandomManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.asserts.SoftAssert;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +15,8 @@ import java.util.concurrent.TimeUnit;
  * Created by numash on 04.12.2016.
  */
 public class BaseTests {
-    protected RandomManager randomManager = new RandomManager();
+    protected static RandomManager randomManager;
+    protected static SoftAssert softAssert;
 
     //declare global driver var
     protected static WebDriver driver;
@@ -27,6 +29,17 @@ public class BaseTests {
         driver = new FirefoxDriver();
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+        randomManager = new RandomManager();
+    }
+
+    /**
+     * Precondition:
+     * 1. Create new instance of SoftAssert
+     */
+    @BeforeMethod(alwaysRun = true)
+    public void beforeMethod(){
+        softAssert = new SoftAssert();
     }
 
     //fills poker player fields with random data

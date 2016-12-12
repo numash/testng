@@ -2,15 +2,13 @@ package tests;
 
 import org.testng.Assert;
 import org.testng.annotations.*;
-import org.testng.asserts.SoftAssert;
 import pages.LoginPage;
 
 /**
  * Created by numash on 30.11.2016.
  */
 public class LoginTests extends BaseTests {
-    private LoginPage loginPage;
-    private SoftAssert softAssert;
+    private static LoginPage loginPage;
 
     /**
      * Precondition:
@@ -18,9 +16,10 @@ public class LoginTests extends BaseTests {
      */
     @BeforeMethod (alwaysRun = true)
     public void beforeMethod(){
+        super.beforeMethod();
+
         //open poker url
         loginPage = LoginPage.loginPage(driver);
-        softAssert = new SoftAssert();
     }
 
     /**

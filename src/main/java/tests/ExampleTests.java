@@ -53,7 +53,7 @@ public class ExampleTests extends BaseTests{
         Assert.assertEquals(driver.getTitle(), title, expectedMessage);
         Assert.assertEquals(loginPage.getUsernameErrorMessage(),
                 "Invalid username or password",
-                "Validation error message is not valid when password is wrong.");
+                "Validation error message is not valid");
     }
 
     @AfterSuite(alwaysRun = true)

@@ -2,9 +2,7 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 /**
  * Created by numash on 30.11.2016.
@@ -32,11 +30,9 @@ public class LoginPage extends BasePage{
 
     //initialize a new instance and open page
     public static LoginPage loginPage(WebDriver driver){
-
         LoginPage page = new LoginPage(driver);
         page.open();
 
-        PageFactory.initElements(driver, page);
         return page;
     }
 

@@ -2,7 +2,6 @@ package tests;
 
 import entities.PokerPlayer;
 import org.testng.annotations.*;
-import org.testng.asserts.SoftAssert;
 import pages.InsertOrEditPlayerPage;
 import pages.LoginPage;
 import pages.PlayersPage;
@@ -11,8 +10,6 @@ import pages.PlayersPage;
  * Created by numash on 03.12.2016.
  */
 public class SearchTests extends BaseTests{
-    private SoftAssert softAssert;
-
     /**
      * Precondition:
      * 1. Login to the system with "admin" login and "123" password.
@@ -22,15 +19,6 @@ public class SearchTests extends BaseTests{
     public void beforeTest(String username, String password){
         LoginPage loginPage = LoginPage.loginPage(driver);
         loginPage.login(username, password);
-    }
-
-    /**
-     * Precondition:
-     * 1. Create new instance of SoftAssert
-     */
-    @BeforeMethod (alwaysRun = true)
-    public void beforeMethod(){
-        softAssert = new SoftAssert();
     }
 
     /**
@@ -47,7 +35,7 @@ public class SearchTests extends BaseTests{
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, password);
+        insertPlayerPage.createPlayer(player, password, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByUsername(player.getUsername());
@@ -70,7 +58,7 @@ public class SearchTests extends BaseTests{
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, password);
+        insertPlayerPage.createPlayer(player, password, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByEmail(player.getEmail());
@@ -93,7 +81,7 @@ public class SearchTests extends BaseTests{
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, password);
+        insertPlayerPage.createPlayer(player, password, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByCity(player.getCity());
@@ -116,7 +104,7 @@ public class SearchTests extends BaseTests{
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, password);
+        insertPlayerPage.createPlayer(player, password, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByFirstName(player.getFirstname());
@@ -139,7 +127,7 @@ public class SearchTests extends BaseTests{
         PokerPlayer player = createRandomPokerPlayer();
 
         InsertOrEditPlayerPage insertPlayerPage = InsertOrEditPlayerPage.openInsertPlayerPage(driver);
-        insertPlayerPage.createPlayer(player, password);
+        insertPlayerPage.createPlayer(player, password, password);
 
         PlayersPage playersPage = PlayersPage.openPlayersPage(driver);
         playersPage.searchPlayerByLastName(player.getLastname());
@@ -157,14 +145,5 @@ public class SearchTests extends BaseTests{
     @Test
     public void resetButtonClearsAllFields(){
         //TODO implement
-    }
-
-    /**
-     * Postcondition:
-     * 1. Close browser.
-     */
-    @AfterTest (alwaysRun = true)
-    public void afterTest(){
-        driver.quit();
     }
 }
